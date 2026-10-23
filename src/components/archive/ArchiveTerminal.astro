@@ -1,0 +1,198 @@
+---
+import type { Locale } from "../../lib/routes";
+import type { Portfolio } from "../../lib/archive-model";
+import { archiveCopy } from "../../data/archive";
+import "../../styles/archive.css";
+import "../../styles/hierarchy.css";
+import "../../styles/matrix.css";
+import "../../styles/portfolio.css";
+import "../../styles/reading-layout.css";
+import "../../styles/navigation-layout.css";
+interface Props {
+  locale: Locale;
+  portfolios: Portfolio[];
+}
+const { locale, portfolios } = Astro.props;
+const t = archiveCopy(locale);
+const en = locale === "en";
+---
+
+<section
+  class="archive-terminal"
+  data-archive-terminal
+  data-locale={locale}
+  data-mode="light"
+  data-level="HOME"
+  data-view="HOME"
+  data-loading={t.loading}
+  data-ready={t.ready}
+  data-fallback={t.fallback}
+  data-failure={t.failure}
+  aria-label={t.terminal}
+>
+  <script
+    type="application/json"
+    data-manifest
+    set:html={JSON.stringify(portfolios).replace(/</g, "\\u003c")}
+  />
+  <div class="terminal-topline">
+    <span class="mono" data-breadcrumb>
+      BA / 01—02
+    </span>
+    <div
+      class="terminal-modes"
+      role="group"
+      aria-label={t.mode}
+      hidden
+      data-enhanced
+    >
+      <button data-enable aria-pressed="false">
+        3D
+      </button>
+      <button data-light aria-pressed="true">
+        {en ? "Simple" : "简洁模式"}
+      </button>
+    </div>
+  </div>
+  <button class="archive-back" data-back hidden>
+    {en ? "← Back" : "← 返回"}
+  </button>
+  <div class="terminal-workspace">
+    <div
+      class="archive-stage"
+      tabindex="0"
+      data-stage
+      aria-label={
+        en
+          ? "Archive navigation. Left/right: projects. Up/down or mouse wheel: sections. Enter: open. Escape: back."
+          : "档案导航。左右切换项目，上下或鼠标滚轮切换内容，Enter 打开，Escape 返回。"
+      }
+    >
+      <div class="archive-canvas" data-canvas></div>
+      <div class="archive-static" aria-hidden="true">
+        {portfolios.map((file, i) => (
+          <div class="static-file" style={`--file:${i}`}>
+            <span class="mono">0{i + 1} / BA</span>
+            <strong>{file.label}</strong>
+            <div class="static-lines"></div>
+            <span class="mono">BIOINFORMATICS ARCHIVE</span>
+          </div>
+        ))}
+      </div>
+    </div>
+    <aside class="archive-inspector" aria-label={t.selected}>
+      <p class="eyebrow" data-index>
+        01 / ACADEMIC
+      </p>
+      <h2 data-title>{portfolios[0]!.title}</h2>
+      <p data-description>{portfolios[0]!.description}</p>
+      <p data-project-summary class="project-summary"></p>
+
+      <button class="archive-open" data-open hidden data-enhanced>
+        {en ? "OPEN FOLDER" : "打开文件夹"} ↗
+      </button>
+    </aside>
+  </div>
+  <nav
+    class="archive-navigator"
+    data-matrix-controls
+    hidden
+    aria-label={en ? "Projects and sections" : "项目与内容导航"}
+  >
+    <div class="section-navigation">
+      <div class="navigation-heading section-heading">
+        <span data-section-progress></span>
+      </div>
+      <div data-section-controls class="section-controls"></div>
+      <div class="navigation-pair">
+        <button data-row="-1">
+          <span>{en ? "↑ Previous section" : "↑ 上一部分"}</span>
+          <small data-target></small>
+        </button>
+        <button data-row="1">
+          <span>{en ? "Next section ↓" : "下一部分 ↓"}</span>
+          <small data-target></small>
+        </button>
+      </div>
+    </div>
+    <div class="project-navigation">
+      <div class="navigation-heading">
+        <span data-project-progress></span>
+        <details class="project-directory" data-project-directory>
+          <summary>{en ? "All projects" : "全部项目"} ↗</summary>
+          <div data-project-list></div>
+        </details>
+      </div>
+      <p class="collection-counts" data-collection-counts></p>
+      <div class="navigation-pair">
+        <button data-column="-1">
+          <span>{en ? "← Previous project" : "← 上一项目"}</span>
+          <small data-target></small>
+        </button>
+        <button data-column="1">
+          <span>{en ? "Next project →" : "下一项目 →"}</span>
+          <small data-target></small>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <div class="archive-hover" data-hover hidden aria-hidden="true">
+    <strong data-hover-title></strong>
+    <span data-hover-section></span>
+  </div>
+  <div data-home-selectors>
+    <div data-selectors class="archive-selectors" hidden data-enhanced></div>
+  </div>
+  <div class="terminal-bottomline">
+    <p role="status" aria-live="polite" aria-atomic="true" data-status>
+      {t.fallback}
+    </p>
+    <p>
+      {en
+        ? "Click to select · double-click or Enter to open · arrows navigate · Esc goes back"
+        : "单击选择 · 双击或 Enter 打开 · 方向键导航 · Esc 按层级返回"}
+    </p>
+  </div>
+  <section
+    class="document-viewer"
+    data-viewer
+    aria-labelledby="viewer-title"
+    hidden
+  >
+    <header>
+      <div>
+        <h2 id="viewer-title"></h2>
+        <p class="eyebrow" data-viewer-project></p>
+      </div>
+    </header>
+    <nav
+      class="reader-navigation"
+      aria-label={en ? "Document navigation" : "阅读导航"}
+    >
+      <p class="reader-progress" data-reader-progress></p>
+      <button data-column="-1">
+        <span>{en ? "← Previous project" : "← 上一项目"}</span>
+        <small data-target></small>
+      </button>
+      <button data-column="1">
+        <span>{en ? "Next project →" : "下一项目 →"}</span>
+        <small data-target></small>
+      </button>
+      <button data-row="-1">
+        <span>{en ? "↑ Previous section" : "↑ 上一部分"}</span>
+        <small data-target></small>
+      </button>
+      <button data-row="1">
+        <span>{en ? "Next section ↓" : "下一部分 ↓"}</span>
+        <small data-target></small>
+      </button>
+    </nav>
+    <p data-viewer-status role="status"></p>
+    <article class="prose" data-viewer-content></article>
+  </section>
+</section>
+<script>
+  import { mountArchive } from "../../scene/bootstrap";
+  const root = document.querySelector<HTMLElement>("[data-archive-terminal]");
+  if (root) mountArchive(root);
+</script>

@@ -1,0 +1,59 @@
+PASS steady state stops frames
+PASS rapid switching keeps latest selection
+PASS dispose cycle 1
+PASS stable resources cycle 1
+PASS dispose cycle 2
+PASS stable resources cycle 2
+PASS dispose cycle 3
+PASS stable resources cycle 3
+PASS dispose cycle 4
+PASS stable resources cycle 4
+PASS dispose cycle 5
+PASS stable resources cycle 5
+PASS hidden page stops rendering
+PASS visible page resumes
+PASS context loss falls back to HTML
+PASS both portfolio HTML links survive
+PASS explicit retry rebuilds one context
+PASS one continuous matrix contains four academic and two technical columns
+PASS up wraps to related publications
+PASS right changes project, not section
+PASS column memory restored
+PASS real publication empty state read from static detail
+PASS reader is an inline content region, not a modal dialog
+PASS reader foregrounds the project title
+PASS extracted reader settles and stops rendering
+PASS reader returns to matrix
+PASS academic A4 crosses directly to technical T1
+PASS cross-portfolio return restores project row memory
+PASS matrix returns home
+PASS technical uses the same six-column matrix and four sections
+PASS technical project and section axes remain independent
+PASS architecture and workflow reuse real sections
+PASS matrix and shadow resources released on return home
+PASS escape cancels pending reader and repeated open
+PASS scroll-sized touch movement does not select
+PASS cancelled touch does not select
+PASS raycast touch selects technical without opening
+PASS second touch opens selected folder
+PASS no uncaught application errors
+{
+  "mode": "3d",
+  "level": "HOME",
+  "folder": "technical",
+  "project": "llm-rnaseq-platform",
+  "section": "overview",
+  "canvases": 1,
+  "activeContexts": 1,
+  "geometries": "5",
+  "textures": "6",
+  "frames": "138",
+  "moving": "false",
+  "paused": "false",
+  "pixels": "1657704",
+  "width": 1912,
+  "scrollWidth": 1912,
+  "errors": [],
+  "engineRequests": 1
+}
+LIFECYCLE PASS

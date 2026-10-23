@@ -1,0 +1,65 @@
+[
+  {
+    "path": "public/media/research/black-porgy-sex-reversal/Fig 5.png",
+    "width": 1021,
+    "height": 810,
+    "sha256": "184f8d4df08962bc952ecbad9aeaf35623b34cd4080c95e5819fa1c0f5682b8e",
+    "placeholder": false
+  },
+  {
+    "path": "public/media/research/black-porgy-sex-reversal/Fig 6.png",
+    "width": 1012,
+    "height": 829,
+    "sha256": "2a5b08836f8a995eec02a45ae86b9666e8c4ea87bc13a05a936f82d06ec70ea7",
+    "placeholder": false
+  },
+  {
+    "path": "public/media/research/black-porgy-sex-reversal/Fig 9.png",
+    "width": 1064,
+    "height": 885,
+    "sha256": "d62d8dcf6895b98cbdb0e550bc260709115ffa921537ab397cc6ba7866cfc9c5",
+    "placeholder": false
+  },
+  {
+    "path": "public/media/research/fish-t2t-genome/Fig 1.png",
+    "width": 969,
+    "height": 486,
+    "sha256": "34a2f0aedead3804dc45df54613ced73650ddc6b591d75d311a21c5db6b00d0d",
+    "placeholder": false
+  },
+  {
+    "path": "public/media/research/fish-t2t-genome/Fig 2.png",
+    "width": 1450,
+    "height": 661,
+    "sha256": "8eaa92a31f3cbbf8b19b715faa8dd035574709790183beeda7d765a2c106a75e",
+    "placeholder": false
+  },
+  {
+    "path": "public/media/research/tilapia-eccdna/Fig 1.png",
+    "width": 333,
+    "height": 283,
+    "sha256": "c328dbb781315e65e8477b1ed625b6e9cd7510b8e5c6895ec12785a93d5c2432",
+    "placeholder": true
+  },
+  {
+    "path": "public/media/research/tilapia-eccdna/Fig 2.png",
+    "width": 333,
+    "height": 283,
+    "sha256": "c328dbb781315e65e8477b1ed625b6e9cd7510b8e5c6895ec12785a93d5c2432",
+    "placeholder": true
+  },
+  {
+    "path": "public/media/research/tilapia-eccdna/Fig 3.png",
+    "width": 333,
+    "height": 283,
+    "sha256": "c328dbb781315e65e8477b1ed625b6e9cd7510b8e5c6895ec12785a93d5c2432",
+    "placeholder": true
+  },
+  {
+    "path": "public/media/software/llm-rnaseq-platform/Fig1.png",
+    "width": 1517,
+    "height": 906,
+    "sha256": "8ebb6d9de12f5dd3a465347553b2140028319a27d32e6adf765f6ad00967ec0d",
+    "placeholder": false
+  }
+]

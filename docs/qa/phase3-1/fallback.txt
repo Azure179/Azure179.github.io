@@ -1,0 +1,44 @@
+Reduced motion default: light mode, no canvas / context, engineRequests=0.
+After explicit enable:
+{
+  "mode": "3d",
+  "level": "PORTFOLIO_MATRIX",
+  "folder": "academic",
+  "project": "black-porgy-sex-reversal",
+  "section": "overview",
+  "canvases": 1,
+  "activeContexts": 1,
+  "geometries": "5",
+  "textures": "4",
+  "frames": "2",
+  "moving": "false",
+  "paused": "false",
+  "pixels": "1657704",
+  "width": 1912,
+  "scrollWidth": 1912,
+  "errors": [],
+  "engineRequests": 1
+}
+Slow import cancellation:
+{
+  "cancelledDuringLoading": true,
+  "pass": true,
+  "mode": "light",
+  "level": "HOME",
+  "folder": "academic",
+  "project": "black-porgy-sex-reversal",
+  "section": "overview",
+  "canvases": 0,
+  "activeContexts": 0,
+  "geometries": "0",
+  "textures": "0",
+  "frames": "0",
+  "moving": "false",
+  "paused": "true",
+  "width": 1912,
+  "scrollWidth": 1897,
+  "errors": [],
+  "engineRequests": 1
+}
+WebGL getContext=null: light mode, zero contexts, research reader opened successfully.
+No-JS: scripts stripped by local QA server; native Academic details exposes all 16 section links and Publications.

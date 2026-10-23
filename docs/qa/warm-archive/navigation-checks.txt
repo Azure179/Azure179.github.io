@@ -1,0 +1,26 @@
+PASS duplicate exit and close controls removed
+PASS both segments of the display switch are visible in 3D
+PASS project and section totals are explicit
+PASS matrix summary is transparent and navigation is outside it
+PASS wheel changes only the section
+PASS wheel burst does not skip multiple sections
+PASS reverse wheel returns to previous section
+PASS pinch zoom is not intercepted
+PASS moving pointer hits the visible array
+PASS raycast hover identifies project and section
+PASS hover caption clears when leaving the scene
+PASS visible matrix keeps its ambient wave active
+PASS ambient wave stops on hidden page
+PASS next project preview names the actual destination
+PASS next project opens the named target
+PASS A4 preview identifies the cross-portfolio destination
+PASS cross-portfolio navigation is retained
+PASS next section preview matches the selected section
+PASS one return control stays below the upper-left logo
+PASS Light mode remains available while reading
+PASS Light mode preserves the reading location and releases the renderer
+PASS shared return goes from reader to matrix
+PASS shared return goes from matrix to home
+PASS both display segments remain visible in simple mode
+PASS no uncaught application errors
+NAVIGATION PASS

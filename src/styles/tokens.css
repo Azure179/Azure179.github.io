@@ -1,0 +1,19 @@
+@theme {
+  --color-paper: #f4f3ef;
+  --color-ink: #292925;
+  --color-muted: #66645c;
+  --color-accent: #855b29;
+  --color-line: #d4d0c6;
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+:root {
+  --surface: #fdfcf9;
+  --accent-soft: #eee5d5;
+  --signal: #9a6425;
+  --control-border: #898376;
+  --page-gutter: clamp(20px, 4.6vw, 80px);
+}

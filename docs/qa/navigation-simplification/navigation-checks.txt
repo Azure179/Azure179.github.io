@@ -1,0 +1,17 @@
+PASS duplicate exit and close controls removed
+PASS only Light mode is visible in 3D
+PASS project and section totals are explicit
+PASS all matrix navigation belongs to the summary panel
+PASS next project preview names the actual destination
+PASS next project opens the named target
+PASS A4 preview identifies the cross-portfolio destination
+PASS cross-portfolio navigation is retained
+PASS next section preview matches the selected section
+PASS one return control stays below the upper-left logo
+PASS Light mode remains available while reading
+PASS Light mode preserves the reading location and releases the renderer
+PASS shared return goes from reader to matrix
+PASS shared return goes from matrix to home
+PASS light view offers one return-to-3D entry
+PASS no uncaught application errors
+NAVIGATION PASS

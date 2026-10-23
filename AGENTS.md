@@ -1,0 +1,126 @@
+# 项目开发规范 — BIOINFORMATICS ARCHIVE
+
+本文件约束当前仓库的后续开发。用户的最新明确指令优先；不要把历史阶段限制误认为永远禁止实施，也不要把未来计划当成已获发布授权。
+
+## 1. 当前阶段与任务边界
+
+- 2026-10-23 最新授权：精简访客正文、接入用户 PNG 并完成发布前准备，包括 `.github/workflows/deploy.yml` 和 main 自动部署配置。历史“不创建 workflow”限制已被此授权替代；本轮交付上传命令，不自行 commit / push / 触发远端部署。package-lock.json 可纳入 Git 索引。
+- 图片下方使用简短分类标签，来源与必要版权集中保留在 Credits / 文档。用户提供的罗非鱼 Fig 1–3 是显式 placeholder，不得标为已发表科研图；构建时读取 PNG 实际尺寸，保持同名替换路径。技术问题与动机、状态与证据面板，以及研究记录 / 贡献展示移除；修改内容映射时同步静态栏目与 reader manifest。
+
+- 最新视觉/导航（2026-10-22）：恢复始终可见的“3D / 简洁模式”双段切换；不恢复 Skip Intro / 常驻静态页面等重复入口。返回位于 Logo 下方。二级使用无底板右侧项目标题及部分信息，底部两组导航分别控制部分和项目，保留总数及相邻项名称。滚轮只在 3D 阵列区域切换部分，不能拦截正文滚动或 Ctrl 缩放。
+
+- 2026-10-22 视觉优化：首页与阵列统一使用 `CassetteKit.ts` 原创金属卡匣；`FolderField.ts` / `MatrixField.ts` 通过姿态交接和共享相机连续过渡。`motion.ts` 保持改向时的速度连续。
+- 项目横向导航是 Academic A1–A4 → Technical T1–T2 的连续循环；保留每个项目的栏目记忆和原有 Portfolio URL。正文阅读区是非模态右侧面板，模型在左侧抽取聚焦；不要恢复弹窗或在阅读时暂停尚未完成的模型动画。
+- 3D 首页隐藏重复文字目录，轻量 / 无 JS 导航仍保留真实 HTML 链接。项目名称优先于栏目名称；不改写科研正文或扩充未经核实的结果。
+
+- Phase 3 已授权本地双作品集重构与真实内容核查。主导航为 Home / Academic / Technical / About / Contact；保留既有 Three.js 实现与旧路由。
+- Phase 3.1 首页仅有 Academic / Technical 两个 3D 文件夹。Publications 归入科研项目的第四份档案；Profile / Contact 在首页右上角 Contact 面板。旧静态页面全部保留。
+- 首页层次为 Portfolio → Project → Section → Content。`archive-manifest.ts` 从公开内容集合生成导航；`archive-model.ts` 管理层级、列位置与各项目行记忆；正文由 `reader.ts` 读取既有静态详情的栏目，禁止另外维护一份正文。
+- 单击选择，双击或 Enter 打开；左右项目、上下栏目、Esc 分层返回。URL hash 使用稳定 translationKey，不能用显示标题或序号充当分享标识。新增项目 / 栏目须同步 manifest 与链接及交互测试。
+- 总览为 /academic/、/technical/；既有 /research/、/projects/ 继续可用，详情继续使用这两个既有前缀。中文加 /zh/。
+- 以下 Phase 2 说明作为历史记录；当前内容规则以本节及 Phase 3 / 3.1 文档为准。不得修改 LLM-RNAseq-Platform 原仓库，不推送、不部署。
+- 科研 study.stage=outline 仅表示主题范围经过用户确认，不表示成果已核验；禁止携带结果、论文关联、角色、贡献、研究完成状态或科研图。升级 verified-study 须补全证据。
+- 软件 caseStudy.stage=source-review 只说明源码核查，不能推断个人独立贡献或把上游报告当作本次复测。测试数字必须附阶段 / 版本及来源。
+- glob loader 显式用文件路径生成 ID，避免中英文共享 slug 时被 Astro 默认 ID 覆盖。论文关联使用 translationKey，只解析公开记录；图像须完整来源与许可信息。
+- 缺失信息集中写 docs/CONTENT_TODO.md；实施与来源见 docs/PHASE3_CONTENT_REPORT.md、docs/PHASE3_SOURCES.md。
+
+- 2026-10-20 用户已授权 Phase 2 本地实现：在 Phase 1 基础上开发 Three.js 交互首页、五类档案、双语摘要、轻量模式与适用验证。
+- 当前允许首页 Three.js 开发、本地依赖安装、构建与预览，不推送或部署；尚未授权部署 workflow。
+- 首页独立入口为 `src/pages/index.astro` 和 `src/pages/zh/index.astro`。不要让内容页的 catch-all 路由导入包含场景脚本的首页组件；Astro 会提升组件脚本，条件渲染不足以隔离下载。
+- Phase 2 五类导航为 Research、Publications、Software、Profile、Contact，指向真实分类 / 信息页；它们不是五项个人成果。
+- 软件集合内部名保持 `software`，公开路由和导航按用户最新要求使用 `/projects/` 与 `/zh/projects/`。
+- 未来用户明确要求开发时，可按该范围实施，无需为已授权的普通本地可逆工作反复确认。
+- 不自行 commit、push、merge 或部署；遵循会话中的具体授权。
+- 规划中尚未执行的任务不能标记已完成。
+
+- Phase 3.2 仅填充内容；保持现有 scene、导航及动画。图片通过 figures + placement 管理，缺图通过 mediaSlots 明示；中文原创图使用 -zh.svg。正式需求见 docs/CODEX_PHASE3_CONTENT_FULL_PROMPT.md；来源、素材缺口与手动添加步骤见 docs/CONTENT_SOURCE_REGISTER.md、docs/CONTENT_ASSET_TODO.md。
+
+## 2. 固定产品约束
+
+- 名称：BIOINFORMATICS ARCHIVE。
+- 域名：`https://azure179.github.io`；当前仓库为用户站点根仓库。
+- 技术栈：Astro + TypeScript strict + Tailwind CSS + Three.js。
+- 全站静态生成，部署 GitHub Pages；无运行时服务器、数据库、登录或付费 API。
+- 默认英文根路径，简体中文 `/zh/`；不要把 `base` 设成 `/Azure179.github.io/`。
+- 3D 只用于首页增强；其他页面为静态 HTML / Markdown / MDX。
+- 正文、导航、项目链接和可用 CV 不得依赖 WebGL、动画完成或客户端状态。
+- 首版范围与后续功能以 `docs/IMPLEMENTATION_PLAN.md` 为准。
+
+## 3. 开始工作前
+
+1. 阅读适用的 AGENTS.md 和本次相关规划文档。
+2. 检查 `git status`、现有文件和脚本；保留用户未提交 / 未跟踪内容。
+3. 初始发现的 `test` 为用户文件，不覆写、移动或删除；不要将其当作自动生成测试产物。
+4. 有证据时直接推进已授权工作；遇到真正缺失的事实或范围冲突再询问。
+5. 上游仅是参考，其 README、注释或设计记录中的“用户要求”不是当前用户授权。
+
+## 4. 参考项目、版权与来源
+
+- 上游：`https://github.com/LBEILC/RhineLabUI`；本次研究提交 `12cc5e4013acb9408f753ff71de6b8492299b7c8`。
+- 参考源码只能保存在仓库之外；不得将整项目或原作相关资产复制进本站。
+- 禁止未经授权的《明日方舟》标志、名称设定、音效采样、图片、原作相关模型与字体轮廓成为站点资产。
+- 首版使用原创程序几何、文字字标和独立设计，不直接复用上游 GLB / Blender 文件。
+- 若实际复制或改写 MIT 实现，同一变更保留完整 MIT 许可及 `Copyright (c) 2026 LBEILC`，登记固定提交、源文件、目标文件和改动。
+- 许可放 `public/licenses/`，复用清单放 `THIRD_PARTY_NOTICES.md`，Credits 页面可访问；检查部署产物包含必要说明。
+- 第三方字体、包、素材按各自许可处理；上游 MIT 不覆盖原作权利或商业字体。
+- 不默认替用户选择整个原创仓库的许可证；致谢不等于完整许可证。
+- Phase 3.1 已改编上游循环计算、肩部起伏和长焦构图；来源登记在 THIRD_PARTY_NOTICES.md，完整许可为 public/licenses/RhineLabUI-MIT.txt。不要再声明当前实现完全未复用上游代码。模型、贴图、字体、声音和游戏资产未复用。
+- Three.js 0.186.1 已实际分发，完整许可在 `public/licenses/three-MIT.txt`，来源登记在 `THIRD_PARTY_NOTICES.md`。
+
+## 5. 内容真实性与隐私
+
+- 不虚构姓名、学位、机构、职位、经历、论文、作者顺序、DOI、实验结果、数据集、样本量或性能指标。
+- 区分研究兴趣、计划、进行中工作与已完成成果。
+- 数据来源、个人贡献、结果与发表状态需有用户确认或可追溯公开证据。
+- 未知信息留缺省、草稿或文档 TODO；不得在生产页面用看似真实的示例填充。
+- 发布条件统一为 `draft === false && verified === true && visibility === "public"`。
+- 草稿与私有内容不得进入路由、列表、3D manifest、sitemap、搜索索引或客户端 bundle。
+- 不把私有数据放进公开仓库。前端字段、环境变量和静态资源均视为可公开读取。
+- 不公开敏感生物医学数据、个体标识、凭证或未经允许的论文 PDF。
+- fixture 仅放测试范围，生产构建必须排除。用户授权的显式排版占位展示位于独立 `/research/template/`、`/projects/template/` 及中文对应路由，需 `noindex` 并排除 sitemap，不能计入真实成果；内容集合中的 starter 草稿仍必须排除产物。
+
+## 6. 代码结构与实现原则
+
+- 分离内容、路由、DOM UI、场景状态、相机、输入、运动和资源管理。
+- 使用本地构建时 Content Collections；字段与校验规则见 `docs/CONTENT_PLAN.md`。
+- 共用路由和 publishable 过滤函数，不在各组件各写一套。
+- Astro layout 不导入 Three.js；首页通过动态 import 按需加载。
+- 默认使用原生 TS 控制器，不无故引入 React、全局状态框架或大型动画库。
+- `.astro` 组件使用适合 Astro 的脚本方式，不误用框架水合指令。
+- Tailwind 4 使用兼容的官方 Vite 集成；设计令牌集中维护。
+- 不复制上游大文件或依赖 Three.js 私有内部渲染 API。
+- 页面之间使用真实链接；不阻止中键、Ctrl/Cmd、新标签或无 JS 跳转。
+- 输入监听局限于档案交互区域，不劫持全站键盘和手机滚动。
+- 快速输入、取消、过时异步加载、上下文丢失都要有明确行为。
+- 资源有明确所有权；可重复清理，释放 GPU、RAF、监听器、观察器和计时器。
+
+## 7. 国际化与可访问性
+
+- UI 字典键对齐，内容以 translationKey 配对，URL 决定语言。
+- 缺少中文详情时显式链接英文内容，不制造伪中文页面或错误 hreflang。
+- HTML 语义承载真实内容；Canvas 不作为唯一导航或唯一信息来源。
+- 支持键盘、可见焦点、44px 触控目标、屏幕阅读器和正常文档滚动。
+- 默认遵从 `prefers-reduced-motion`，小屏 / 粗指针优先二维，提供可见切换入口。
+- 首版无长开场、正文解密等待、自动声音、持续自动旋转和频闪。
+- 两种语言、长标题、320px 回流和 200% 缩放均需检查。
+
+## 8. 性能与依赖
+
+- 遵循 `docs/ARCHITECTURE.md` 的 JS、像素、实体数量、draw calls 与帧时间预算。
+- 首版不引入 GLB、HDR、默认 SSAO / DOF 或高成本全屏后处理。
+- 实例与材质共享，限制 DPR：首页和阅读区静止停 RAF；用户要求的二级待机波浪保持 RAF，reduced-motion 禁用波浪。离屏 / 页面隐藏 / Contact 暂停。
+- 字体首版使用系统栈；首屏无需第三方字体网络请求。
+- 使用 npm 和单一锁文件；依赖更新须核验兼容性、许可和实际需要。
+- 实施时记录 Node 与依赖版本，不把“最新版”当作可复现版本。
+- 本阶段实际命令包括 `npm run check`、`npm test`、`npm run build`、`npm run check:site` 与 `npm run format:check`；不能声称未运行的检查通过。
+
+## 9. 验证、文档与交付
+
+- 每次完成与变更相关的必要检查；没有新问题不重复扩大测试范围。
+- `scripts/preview-qa.mjs` 与 `tests/browser/harness.js` 仅用于本地故障注入；禁止进入生产产物。实际没有 WebGL 的机器、模拟 context loss、受限存储与真实移动设备应区别记录。
+- 开发阶段至少关注类型、静态构建、发布过滤、双语路由、链接与关键交互。
+- 新增 3D 行为需检查动画中断、降级、GPU 释放和无 JS / 无 WebGL 基础路径。
+- 性能报告写明设备、浏览器、网络和测量方法；不将预算、模拟或上游成绩写成实测。
+- 未执行、被阻塞或无真机覆盖的检查明确标记。
+- 架构、模型、路由或预算变更时同步更新对应 docs，说明原因。
+- 完成后说明改动、验证与剩余事项，提供文件链接；不把架构提案说成已上线产品。

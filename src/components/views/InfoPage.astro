@@ -1,0 +1,136 @@
+---
+import PageHeading from "../PageHeading.astro";
+import { profile } from "../../data/profile";
+import { ui } from "../../i18n/ui";
+import type { Locale } from "../../lib/routes";
+interface Props {
+  locale: Locale;
+  page: "contact" | "cv" | "credits";
+}
+const { locale, page } = Astro.props;
+const t = ui(locale);
+const heading =
+  page === "contact"
+    ? t.contactHeading
+    : page === "cv"
+      ? t.cvHeading
+      : t.creditsHeading;
+const intro =
+  page === "contact"
+    ? t.contactIntro
+    : page === "cv"
+      ? t.cvIntro
+      : t.creditsIntro;
+---
+
+<PageHeading
+  index={page === "contact" ? "06" : page === "cv" ? "05" : "07"}
+  label={t[page]}
+  title={heading}
+  description={intro}
+/>
+{page === "contact" ? (
+  <div class="contact-layout">
+    <section class="contact-panel">
+      <p class="eyebrow">{t.contactLabel}</p>
+      <a
+        class="contact-address"
+        href={profile.email ? `mailto:${profile.email}` : profile.githubUrl}
+      >
+        {profile.email ?? "GitHub / Azure179"} ↗
+      </a>
+      <div class="contact-rule" aria-hidden="true"></div>
+      <span class="mono">BIOINFORMATICS / AI</span>
+    </section>
+    <section class="contact-aside">
+      <h2>{t.elsewhere}</h2>
+      <a href={profile.githubUrl}>GitHub ↗</a>
+      {profile.scholarUrl && (
+        <p>
+          <a href={profile.scholarUrl}>Google Scholar ↗</a>
+        </p>
+      )}
+    </section>
+  </div>
+) : page === "cv" ? (
+  <div class="prose">
+    {profile.cvPath ? (
+      <p>
+        <a href={profile.cvPath} download>
+          {t.cvDownload} ↓
+        </a>
+      </p>
+    ) : (
+      <p>
+        {locale === "en"
+          ? "Explore the academic and technical portfolios for research and engineering work."
+          : "通过学术与技术作品集了解研究和工程项目。"}
+      </p>
+    )}
+    <p>
+      <a href={locale === "en" ? "/academic/" : "/zh/academic/"}>
+        {t.academic} ↗
+      </a>
+    </p>
+    <p>
+      <a href={locale === "en" ? "/technical/" : "/zh/technical/"}>
+        {t.technical} ↗
+      </a>
+    </p>
+  </div>
+) : (
+  <div class="prose credits-copy">
+    <p>{t.creditsBody}</p>
+    <p>{t.creditsStack}</p>
+    <ul>
+      <li>
+        <a href="https://github.com/LBEILC/RhineLabUI">LBEILC / RhineLabUI</a>
+        {" · "}
+        <a href="/licenses/RhineLabUI-MIT.txt">MIT License</a>
+      </li>
+      <li>
+        <a href="https://astro.build">Astro</a>
+      </li>
+      <li>
+        <a href="https://www.typescriptlang.org">TypeScript</a>
+      </li>
+      <li>
+        <a href="https://tailwindcss.com">Tailwind CSS</a>
+      </li>
+      <li>
+        <a href="https://threejs.org">Three.js</a>
+        {" · "}
+        <a href="/licenses/three-MIT.txt">MIT License</a>
+      </li>
+      <li>
+        <a href="https://doi.org/10.1016/j.aquaculture.2026.744391">
+          Chen, Duan et al. · Aquaculture, Figures 5, 6, 9
+        </a>{" "}
+        ·{" "}
+        {locale === "en"
+          ? "Figures supplied by the site owner."
+          : "图片由本站作者提供。"}
+      </li>
+      <li>
+        <a href="https://doi.org/10.1038/s41597-026-07505-8">
+          Duan et al. · Scientific Data (2026)
+        </a>{" "}
+        ·{" "}
+        {locale === "en"
+          ? "Genome panels supplied by the site owner."
+          : "基因组图由本站作者提供。"}{" "}
+        ·{" "}
+        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">
+          CC BY-NC-ND 4.0
+        </a>
+      </li>
+      <li>
+        <a href="https://doi.org/10.3390/biom15060896">
+          Guo, Duan, Chen et al. · Biomolecules (2025), Figures 2, 3, 7
+        </a>
+        {" · © 2025 the authors · "}
+        <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+      </li>
+    </ul>
+  </div>
+)}

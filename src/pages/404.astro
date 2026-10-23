@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  locale="en"
+  page="home"
+  title="Page not found"
+  description="This page could not be found in the archive."
+  noindex
+  alternatePath={null}
+>
+  <section class="error-page">
+    <p class="eyebrow">404 / FILE NOT FOUND</p>
+    <h1>
+      This file isn't
+      <br />
+      in the archive.
+    </h1>
+    <p>The address may have changed, or the page has not been published.</p>
+    <p lang="zh-CN">地址可能已更改，或页面尚未发布。</p>
+    <div class="flex flex-wrap gap-4">
+      <a class="button button-solid" href="/">
+        Return to the archive ↗
+      </a>
+      <a class="button button-outline" href="/zh/" lang="zh-CN">
+        返回中文首页 ↗
+      </a>
+    </div>
+  </section>
+</BaseLayout>

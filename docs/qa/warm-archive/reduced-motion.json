@@ -1,0 +1,19 @@
+{
+  "mode": "3d",
+  "level": "PORTFOLIO_MATRIX",
+  "folder": "academic",
+  "project": "fish-t2t-genome",
+  "section": "overview",
+  "canvases": 1,
+  "activeContexts": 1,
+  "geometries": "7",
+  "textures": "5",
+  "frames": "2",
+  "moving": "false",
+  "paused": "false",
+  "pixels": "1655792",
+  "width": 1912,
+  "scrollWidth": 1912,
+  "errors": [],
+  "engineRequests": 1
+}

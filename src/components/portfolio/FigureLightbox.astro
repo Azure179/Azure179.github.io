@@ -1,0 +1,103 @@
+---
+interface Props {
+  locale: "en" | "zh";
+}
+const { locale } = Astro.props;
+---
+
+<dialog
+  class="figure-lightbox"
+  aria-label={locale === "en" ? "Full-size figure" : "放大图片"}
+>
+  <button type="button" autofocus>
+    {locale === "en" ? "Close image" : "关闭图片"} ×
+  </button>
+  <figure>
+    <figcaption></figcaption>
+  </figure>
+</dialog>
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>(".figure-lightbox");
+  if (dialog) {
+    let trigger: HTMLElement | null = null;
+    document.addEventListener("click", (event) => {
+      const anchor = (event.target as Element).closest<HTMLAnchorElement>(
+        "a[data-figure-enlarge]",
+      );
+      if (
+        !anchor ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey ||
+        event.altKey ||
+        event.button !== 0
+      )
+        return;
+      const original = anchor.querySelector("img");
+      if (!original) return;
+      const enlarged = document.createElement("img");
+      dialog.querySelector("img")?.remove();
+      dialog.querySelector("figure")!.prepend(enlarged);
+      event.preventDefault();
+      trigger = anchor;
+      enlarged.src = anchor.href;
+      enlarged.alt = original.alt;
+      dialog.querySelector("figcaption")!.textContent =
+        anchor.closest("figure")?.querySelector("figcaption")?.textContent ??
+        original.alt;
+      dialog.showModal();
+    });
+    dialog
+      .querySelector("button")
+      ?.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener("keydown", (event) => event.stopPropagation());
+    dialog.addEventListener("close", () => {
+      dialog.querySelector("img")?.remove();
+      trigger?.focus();
+    });
+  }
+</script>
+<style>
+  .figure-lightbox {
+    margin: auto;
+    width: min(96vw, 1440px);
+    max-height: 94dvh;
+    padding: 1rem;
+    border: 1px solid #a69a88;
+    background: #f4f3ef;
+    color: #202321;
+    overflow: auto;
+  }
+  .figure-lightbox::backdrop {
+    background: rgb(22 24 23 / 78%);
+  }
+  button {
+    display: block;
+    margin-left: auto;
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    position: sticky;
+    top: 0;
+    background: #f4f3ef;
+    border: 1px solid currentColor;
+    z-index: 1;
+  }
+  figure {
+    margin: 1rem 0 0;
+  }
+  :global(.figure-lightbox img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  figcaption {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+</style>

@@ -1,0 +1,104 @@
+---
+import PageHeading from "../PageHeading.astro";
+import { entriesFor } from "../../lib/content";
+import {
+  collectionPage,
+  entryPath,
+  type Locale,
+  type CollectionName,
+} from "../../lib/routes";
+import { ui } from "../../i18n/ui";
+interface Props {
+  locale: Locale;
+  collection: CollectionName;
+}
+const { locale, collection } = Astro.props;
+const t = ui(locale);
+const records = await entriesFor(collection, locale);
+const page = collectionPage(collection);
+const heading =
+  collection === "research"
+    ? t.researchHeading
+    : collection === "software"
+      ? t.projectsHeading
+      : t.publicationsHeading;
+const intro =
+  collection === "research"
+    ? t.researchIntro
+    : collection === "software"
+      ? t.projectsIntro
+      : t.publicationsIntro;
+const fields =
+  collection === "research"
+    ? t.researchFields
+    : collection === "software"
+      ? t.softwareFields
+      : t.publicationFields;
+const number =
+  collection === "research" ? "01" : collection === "software" ? "02" : "03";
+---
+
+<PageHeading
+  index={number}
+  label={t[page]}
+  title={heading}
+  description={intro}
+/>
+<section class="collection-body">
+  <div class="collection-toolbar">
+    <span class="eyebrow">
+      {t.section} / {t[page]}
+    </span>
+    <span class="mono">{records.length.toString().padStart(2, "0")}</span>
+  </div>
+  {records.length ? (
+    <div class="record-list">
+      {records.map((entry) => (
+        <article class="record-row">
+          <span class="mono record-id">{entry.data.archiveId}</span>
+          <div>
+            <div class="tag-list">
+              {entry.data.tags.map((tag) => (
+                <span>{tag}</span>
+              ))}
+              {entry.data.locale !== locale && <span>{t.englishOnly}</span>}
+            </div>
+            <h2>
+              <a
+                href={entryPath(
+                  entry.collection,
+                  entry.data.slug,
+                  entry.data.locale,
+                )}
+                lang={entry.data.locale}
+              >
+                {entry.data.title}
+              </a>
+            </h2>
+            <p>{entry.data.summary}</p>
+          </div>
+          <span aria-hidden="true">↗</span>
+        </article>
+      ))}
+    </div>
+  ) : (
+    <div class="empty-collection">
+      <div class="empty-glyph" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div>
+        <span class="status-label">{t.preparing}</span>
+        <h2>{t.emptyTitle}</h2>
+        <p>{t.emptyDescription}</p>
+        <p class="record-fields">{fields}</p>
+        {collection !== "publications" && (
+          <a class="text-link" href={entryPath(collection, "template", locale)}>
+            {t.template} <span aria-hidden="true">↗</span>
+          </a>
+        )}
+      </div>
+    </div>
+  )}
+</section>

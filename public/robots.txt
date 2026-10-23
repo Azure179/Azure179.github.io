@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://azure179.github.io/sitemap-index.xml

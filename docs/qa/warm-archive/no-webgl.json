@@ -1,0 +1,18 @@
+{
+  "mode": "light",
+  "level": "DOCUMENT_VIEWER",
+  "folder": "academic",
+  "project": "fish-t2t-genome",
+  "section": "workflow",
+  "canvases": 0,
+  "activeContexts": 0,
+  "geometries": "0",
+  "textures": "0",
+  "frames": "0",
+  "moving": "false",
+  "paused": "false",
+  "width": 1912,
+  "scrollWidth": 1912,
+  "errors": [],
+  "engineRequests": 1
+}

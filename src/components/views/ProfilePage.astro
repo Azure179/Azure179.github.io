@@ -1,0 +1,67 @@
+---
+import PageHeading from "../PageHeading.astro";
+import { profile } from "../../data/profile";
+import { pagePath, type Locale } from "../../lib/routes";
+import { ui } from "../../i18n/ui";
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = ui(locale);
+---
+
+<PageHeading
+  index="04"
+  label={t.about}
+  title={t.aboutHeading}
+  description={t.aboutIntro}
+/>
+<div class="profile-layout">
+  <aside class="profile-card">
+    <div class="profile-monogram" aria-hidden="true">
+      BA
+    </div>
+    <h2>{profile.displayName ?? "Azure179"}</h2>
+    <p>
+      {profile.biography?.[locale] ??
+        (locale === "en"
+          ? "Bioinformatics research and software development."
+          : "生物信息学研究与软件开发。")}
+    </p>
+    <a class="text-link" href={profile.githubUrl}>
+      GitHub ↗
+    </a>
+  </aside>
+  <div class="profile-sections">
+    <section class="editorial-section">
+      <div>
+        <h2>{locale === "en" ? "Research" : "学术研究"}</h2>
+        <p>
+          {locale === "en"
+            ? "Fish genomics, epigenetic regulation and multi-omics analysis."
+            : "鱼类基因组学、表观遗传调控与多组学分析。"}
+        </p>
+        <a href={pagePath("academic", locale)}>{t.academic} ↗</a>
+      </div>
+    </section>
+    <section class="editorial-section">
+      <div>
+        <h2>{locale === "en" ? "Software" : "技术项目"}</h2>
+        <p>
+          {locale === "en"
+            ? "RNA-seq analysis tools, LLM-assisted workflows and an interactive research archive."
+            : "RNA-seq 分析工具、LLM 辅助工作流与交互式科研档案。"}
+        </p>
+        <a href={pagePath("technical", locale)}>{t.technical} ↗</a>
+      </div>
+    </section>
+    {profile.education && (
+      <section class="editorial-section">
+        <div>
+          <h2>{t.education}</h2>
+          <p>{profile.education[locale]}</p>
+        </div>
+      </section>
+    )}
+  </div>
+</div>

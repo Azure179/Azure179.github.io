@@ -1,0 +1,199 @@
+.archive-selectors,
+.terminal-directory nav {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.archive-selectors button:last-child {
+  grid-column: auto;
+}
+.archive-terminal:not([data-view="HOME"]) .archive-selectors {
+  grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
+}
+.archive-terminal button.archive-open {
+  background: #30302b;
+  color: #fffdf8;
+  width: 100%;
+}
+.archive-terminal button.archive-open:hover {
+  background: #7d5828;
+}
+.archive-inspector .text-link {
+  display: block;
+  margin-block: 18px 8px;
+}
+.archive-inspector [data-back] {
+  font-size: 12px;
+  padding: 0;
+}
+.static-file {
+  flex-basis: 36%;
+  transform: translateY(calc(var(--file) * -16px)) skewY(-10deg);
+  box-shadow:
+    5px 5px #d3d0c6,
+    10px 10px #e1ded4,
+    13px 13px #bdb7a8;
+  border-left: 6px solid #ab875a;
+}
+.static-file + .static-file {
+  margin-left: 8%;
+}
+.static-file strong {
+  font-size: clamp(11px, 1.2vw, 18px);
+}
+.static-file::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: -17px;
+  width: 48%;
+  height: 17px;
+  background: #c3b8a1;
+  border: 1px solid #b3a58c;
+}
+.matrix-controls {
+  display: flex;
+  flex-wrap: wrap;
+  border-block: 1px solid var(--color-line);
+  gap: 8px;
+  padding-block: 8px;
+}
+.matrix-controls button {
+  padding: 6px 14px;
+  font-size: 12px;
+  border: 1px solid var(--color-line);
+}
+.matrix-controls button:nth-child(3) {
+  margin-left: auto;
+}
+.section-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--color-line);
+  border: 1px solid var(--color-line);
+}
+.section-controls button {
+  text-align: left;
+  padding: 14px;
+  font-size: 12px;
+  background: var(--color-paper);
+}
+.section-controls button[aria-pressed="true"] {
+  background: #e9e3d7;
+  box-shadow: inset 3px 0 #a87535;
+}
+[data-mode="light"]:not([data-view="HOME"]) .archive-stage {
+  display: none;
+}
+[data-mode="light"]:not([data-view="HOME"]) .terminal-workspace {
+  display: block;
+  min-height: 0;
+}
+[data-mode="light"]:not([data-view="HOME"]) .archive-inspector {
+  border-left: 0;
+  padding: 32px 0;
+  max-width: 680px;
+}
+[data-busy="true"] [data-open] {
+  opacity: 0.6;
+  cursor: progress;
+}
+.document-viewer {
+  margin: auto;
+  width: min(980px, calc(100vw - 32px));
+  max-height: 88dvh;
+  padding: clamp(20px, 4vw, 52px);
+  border: 1px solid #aaa292;
+  background: #f6f4ee;
+  color: #292923;
+  box-shadow: 0 24px 100px #19181155;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.document-viewer::backdrop {
+  background: #26251f80;
+  backdrop-filter: blur(5px);
+}
+.document-viewer > header {
+  display: flex;
+  align-items: start;
+  gap: 20px;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-line);
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+.document-viewer h2 {
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1.2;
+  margin-top: 8px;
+}
+.document-viewer [data-viewer-close] {
+  flex: 0 0 44px;
+  border: 1px solid var(--color-line);
+}
+.document-viewer article {
+  max-width: none;
+  margin-top: 24px;
+}
+.document-viewer article section {
+  margin-block: 28px;
+}
+.document-viewer img {
+  max-width: 100%;
+  height: auto;
+}
+.static-archive-tree {
+  border-bottom: 1px solid var(--color-line);
+  margin-bottom: 36px;
+}
+.static-archive-tree details {
+  border-top: 1px solid var(--color-line);
+  padding-block: 18px;
+}
+.static-archive-tree summary {
+  min-height: 44px;
+  cursor: pointer;
+  font-size: 18px;
+}
+.static-archive-tree h3 {
+  font-size: 16px;
+  margin: 24px 0 12px;
+}
+.static-archive-tree ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  list-style: none;
+  padding: 0;
+}
+.static-archive-tree a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (max-width: 767px) {
+  .archive-selectors,
+  .section-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .matrix-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .matrix-controls button:nth-child(3) {
+    margin-left: 0;
+  }
+  .archive-stage {
+    height: 340px;
+  }
+  .static-file {
+    position: relative;
+  }
+  .document-viewer {
+    width: calc(100vw - 16px);
+    max-height: 94dvh;
+  }
+}

@@ -1,0 +1,127 @@
+---
+import PageHeading from "../PageHeading.astro";
+import "../../styles/portfolio.css";
+import { entriesFor } from "../../lib/content";
+import { pagePath, entryPath, type Locale } from "../../lib/routes";
+import { researchAreas } from "../../data/portfolio";
+interface Props {
+  locale: Locale;
+  kind: "academic" | "technical";
+  legacy?: boolean;
+}
+const { locale, kind, legacy = false } = Astro.props;
+const en = locale === "en";
+const academic = kind === "academic";
+const entries = (
+  await entriesFor(academic ? "research" : "software", locale)
+).sort((a, b) => a.data.archiveId.localeCompare(b.data.archiveId));
+const groups = academic
+  ? researchAreas.map((area) => ({
+      id: area.id,
+      title: area[locale],
+      description: area.description[locale],
+      records: entries.filter(
+        (item) => "study" in item.data && item.data.study?.area === area.id,
+      ),
+    }))
+  : [
+      {
+        id: "T",
+        title: en ? "Engineering case studies" : "软件工程案例",
+        description: en
+          ? "Software architecture, analysis workflows and interactive applications."
+          : "软件架构、分析工作流与交互应用。",
+        records: entries,
+      },
+    ];
+---
+
+<PageHeading
+  index={academic ? "01" : "02"}
+  label={academic ? "ACADEMIC PORTFOLIO" : "TECHNICAL PORTFOLIO"}
+  title={
+    academic
+      ? en
+        ? "Questions across biological scales."
+        : "跨越生物学尺度的研究问题。"
+      : en
+        ? "From analysis to usable systems."
+        : "从分析方法到可用的软件。"
+  }
+  description={
+    academic
+      ? en
+        ? "Explore fish genomics, epigenetic regulation and multi-omics across four research projects."
+        : "从四个研究项目探索鱼类基因组、表观遗传调控与多组学。"
+      : en
+        ? "Two software projects, documented through problems, architecture, workflows and validation."
+        : "以问题、架构、流程和验证记录呈现两个软件项目。"
+  }
+/>
+{legacy && (
+  <p class="evidence-notice">
+    {en
+      ? "This address remains available. Continue to the portfolio overview:"
+      : "此旧地址继续保留。新的作品集总览："}{" "}
+    <a href={pagePath(kind, locale)}>
+      {academic ? "Academic Portfolio" : "Technical Portfolio"} ↗
+    </a>
+  </p>
+)}
+{academic && (
+  <nav class="area-nav" aria-label={en ? "Research areas" : "研究领域"}>
+    {researchAreas.map((area) => (
+      <a href={`#${area.id}`}>
+        {area.id} / {area[locale]}
+      </a>
+    ))}
+    <a href={pagePath("publications", locale)}>
+      {en ? "Publications ↗" : "论文目录 ↗"}
+    </a>
+  </nav>
+)}
+{groups.map((group) => (
+  <section class="portfolio-group" id={group.id}>
+    <header class="portfolio-group-heading">
+      <span class="eyebrow">
+        {group.id} / {academic ? "RESEARCH AREA" : "ENGINEERING"}
+      </span>
+      <h2>{group.title}</h2>
+      <p>{group.description}</p>
+    </header>
+    <div class="portfolio-cards">
+      {group.records.map((entry) => (
+        <article class="portfolio-card">
+          <p class="eyebrow">{entry.data.archiveId}</p>
+          <h3>
+            <a
+              href={entryPath(
+                entry.collection,
+                entry.data.slug,
+                entry.data.locale,
+              )}
+            >
+              {entry.data.title}
+            </a>
+          </h3>
+          <p>{entry.data.summary}</p>
+          <div class="tag-list">
+            {entry.data.tags.map((tag) => (
+              <span>{tag}</span>
+            ))}
+          </div>
+          <a
+            class="text-link"
+            href={entryPath(
+              entry.collection,
+              entry.data.slug,
+              entry.data.locale,
+            )}
+          >
+            {en ? "Open archive" : "打开档案"} ↗
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+))}

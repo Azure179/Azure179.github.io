@@ -1,0 +1,64 @@
+---
+import type { z } from "astro/zod";
+import type { figureSchema } from "../../lib/portfolio-schema";
+import type { Locale } from "../../lib/routes";
+import { figureDimensions } from "../../lib/figure-dimensions";
+interface Props {
+  figures: z.infer<typeof figureSchema>[];
+  locale: Locale;
+}
+const { figures, locale } = Astro.props;
+const media = await Promise.all(
+  figures.map(async (figure) => ({
+    ...figure,
+    ...(await figureDimensions(figure)),
+  })),
+);
+const labels =
+  locale === "en"
+    ? {
+        diagram: "Concept & workflow",
+        screenshot: "Application screenshot",
+        "research-result": "Published research figure",
+        placeholder: "Image placeholder",
+      }
+    : {
+        diagram: "概念与流程示意",
+        screenshot: "应用内截图",
+        "research-result": "已发表科研图片",
+        placeholder: "图片占位",
+      };
+---
+
+<div class="figure-gallery">
+  {media.map((figure) => (
+    <figure data-media-kind={figure.kind}>
+      <a
+        href={figure.src}
+        target="_blank"
+        rel="noopener"
+        data-figure-enlarge
+        aria-label={`${locale === "en" ? "Enlarge" : "放大查看"}: ${figure.title}`}
+      >
+        <img
+          class:list={{ portrait: figure.height > figure.width }}
+          src={figure.src}
+          alt={figure.alt}
+          width={figure.width}
+          height={figure.height}
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+      <figcaption>
+        {figure.sourceUrl && figure.kind === "research-result" ? (
+          <a href={figure.sourceUrl} target="_blank" rel="noopener noreferrer">
+            {labels[figure.kind]}
+          </a>
+        ) : (
+          <span>{labels[figure.kind]}</span>
+        )}
+      </figcaption>
+    </figure>
+  ))}
+</div>

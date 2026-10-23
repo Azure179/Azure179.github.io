@@ -1,0 +1,120 @@
+---
+import { profile } from "../../data/profile";
+import { pagePath, type Locale } from "../../lib/routes";
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const en = locale === "en";
+---
+
+<details class="contact-menu" data-contact-panel>
+  <summary>
+    Contact <span aria-hidden="true">＋</span>
+  </summary>
+  <section aria-label={en ? "Profile and contact" : "个人简介与联系方式"}>
+    <p class="eyebrow">PROFILE / CONTACT</p>
+    <h2>{profile.displayName ?? "Azure179"}</h2>
+    {profile.biography && <p>{profile.biography[locale]}</p>}
+    <a href={pagePath("about", locale)}>
+      {en ? "About this portfolio" : "关于此作品集"} ↗
+    </a>
+    {(profile.education || profile.researchInterests) && (
+      <>
+        <h3>{en ? "Education & Research Interests" : "教育经历与研究兴趣"}</h3>
+        {profile.education && <p>{profile.education[locale]}</p>}
+        {profile.researchInterests && (
+          <p>{profile.researchInterests[locale]}</p>
+        )}
+      </>
+    )}
+    {profile.technicalSkills && (
+      <>
+        <h3>{en ? "Technical Skills" : "技术技能"}</h3>
+        <p>{profile.technicalSkills[locale]}</p>
+      </>
+    )}
+    <div class="contact-links">
+      {profile.email && <a href={`mailto:${profile.email}`}>{profile.email}</a>}
+      <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer">
+        GitHub ↗
+      </a>
+      {profile.scholarUrl && (
+        <a href={profile.scholarUrl} target="_blank" rel="noopener noreferrer">
+          Google Scholar ↗
+        </a>
+      )}
+      {profile.cvPath && (
+        <a href={profile.cvPath} download>
+          {en ? "Download Academic CV" : "下载学术简历"} ↓
+        </a>
+      )}
+      {profile.professionalResumePath && (
+        <a href={profile.professionalResumePath} download>
+          {en ? "Download Professional Resume" : "下载求职简历"} ↓
+        </a>
+      )}
+      <a href={pagePath("contact", locale)}>
+        {en ? "Contact page" : "联系页面"} ↗
+      </a>
+    </div>
+  </section>
+</details>
+<style>
+  .contact-menu {
+    position: relative;
+  }
+  summary {
+    cursor: pointer;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  section {
+    position: absolute;
+    z-index: 40;
+    right: 0;
+    top: calc(100% + 12px);
+    width: min(420px, calc(100vw - 32px));
+    max-height: 78dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 28px;
+    background: #f7f5eef5;
+    border: 1px solid #bcb7aa;
+    box-shadow: 0 20px 60px #29282126;
+    backdrop-filter: blur(16px);
+  }
+  h2 {
+    font-size: 28px;
+    margin-block: 12px;
+  }
+  h3 {
+    font-size: 14px;
+    margin-top: 24px;
+  }
+  p {
+    font-size: 13px;
+    color: #656158;
+    margin-block: 8px;
+  }
+  a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 13px;
+    color: #805921;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .contact-links {
+    border-top: 1px solid #cec9bd;
+    margin-top: 20px;
+    padding-top: 12px;
+  }
+</style>

@@ -1,0 +1,251 @@
+---
+import type { GetStaticPaths } from "astro";
+import { render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DetailLayout from "../layouts/DetailLayout.astro";
+import Collection from "../components/views/Collection.astro";
+import ProfilePage from "../components/views/ProfilePage.astro";
+import InfoPage from "../components/views/InfoPage.astro";
+import { allPublished, type ArchiveEntry } from "../lib/content";
+import {
+  locales,
+  pages,
+  pagePath,
+  entryPath,
+  oppositeLocale,
+  collectionPage,
+  type Locale,
+  type PageKey,
+} from "../lib/routes";
+import { ui, pageTitle } from "../i18n/ui";
+import PortfolioOverview from "../components/portfolio/PortfolioOverview.astro";
+import ResearchDetail from "../components/portfolio/ResearchDetail.astro";
+import TechnicalDetail from "../components/portfolio/TechnicalDetail.astro";
+import { portfolioHeadings } from "../data/portfolio";
+
+interface Props extends Record<string, unknown> {
+  locale: Locale;
+  page: PageKey;
+  entry?: ArchiveEntry;
+  templateKind?: "research" | "software";
+  alternatePath?: string | null;
+  switchHref?: string;
+}
+
+export const getStaticPaths = (async () => {
+  const routes: { params: { path: string | undefined }; props: Props }[] = [];
+  const toParam = (path: string) => path.replace(/^\/|\/$/g, "") || undefined;
+  for (const locale of locales) {
+    for (const page of pages.filter((page) => page !== "home"))
+      routes.push({
+        params: { path: toParam(pagePath(page, locale)) },
+        props: { locale, page },
+      });
+    for (const templateKind of ["research", "software"] as const) {
+      routes.push({
+        params: { path: toParam(entryPath(templateKind, "template", locale)) },
+        props: {
+          locale,
+          page: collectionPage(templateKind),
+          templateKind,
+          alternatePath: entryPath(
+            templateKind,
+            "template",
+            oppositeLocale(locale),
+          ),
+        },
+      });
+    }
+  }
+  const entries = await allPublished();
+  for (const entry of entries) {
+    const locale = entry.data.locale;
+    const counterpart = entries.find(
+      (candidate) =>
+        candidate.collection === entry.collection &&
+        candidate.data.translationKey === entry.data.translationKey &&
+        candidate.data.locale !== locale,
+    );
+    const alternatePath = counterpart
+      ? entryPath(
+          counterpart.collection,
+          counterpart.data.slug,
+          counterpart.data.locale,
+        )
+      : null;
+    routes.push({
+      params: {
+        path: toParam(entryPath(entry.collection, entry.data.slug, locale)),
+      },
+      props: {
+        locale,
+        page: collectionPage(entry.collection),
+        entry,
+        alternatePath,
+        switchHref:
+          alternatePath ??
+          pagePath(collectionPage(entry.collection), oppositeLocale(locale)),
+      },
+    });
+  }
+  return routes;
+}) satisfies GetStaticPaths;
+
+const { locale, page, entry, templateKind, alternatePath, switchHref } =
+  Astro.props;
+const t = ui(locale);
+const rendered = entry ? await render(entry) : null;
+const Content = rendered?.Content;
+const status = entry
+  ? "researchStatus" in entry.data
+    ? entry.data.researchStatus
+    : "projectStatus" in entry.data
+      ? entry.data.projectStatus
+      : "publicationStatus" in entry.data
+        ? entry.data.publicationStatus
+        : undefined
+  : undefined;
+const description =
+  page === "academic"
+    ? t.researchIntro
+    : page === "technical"
+      ? t.projectsIntro
+      : page === "home"
+        ? t.heroDescription
+        : page === "about"
+          ? t.aboutIntro
+          : page === "research"
+            ? t.researchIntro
+            : page === "projects"
+              ? t.projectsIntro
+              : page === "publications"
+                ? t.publicationsIntro
+                : page === "contact"
+                  ? t.contactIntro
+                  : page === "cv"
+                    ? t.cvIntro
+                    : t.creditsIntro;
+---
+
+{templateKind ? (
+  <BaseLayout
+    locale={locale}
+    page={templateKind === "research" ? "academic" : "technical"}
+    title={templateKind === "research" ? t.academic : t.technical}
+    description={description}
+    noindex
+  >
+    <h1>{templateKind === "research" ? t.academic : t.technical}</h1>
+    <p>
+      <a
+        href={pagePath(
+          templateKind === "research" ? "academic" : "technical",
+          locale,
+        )}
+      >
+        {t.browse} ?
+      </a>
+    </p>
+  </BaseLayout>
+) : entry && Content ? (
+  <DetailLayout
+    locale={locale}
+    collection={entry.collection}
+    title={entry.data.title}
+    summary={entry.data.summary}
+    headings={
+      (entry.collection === "research" && entry.data.study) ||
+      (entry.collection === "software" && entry.data.caseStudy)
+        ? portfolioHeadings(
+            entry.collection as "research" | "software",
+            locale,
+          ).filter(
+            ({ id }) =>
+              id !== "findings" ||
+              ("study" in entry.data && !!entry.data.study?.findings.length),
+          )
+        : (rendered?.headings ?? [])
+            .filter((heading) => heading.depth === 2)
+            .map((heading) => ({ id: heading.slug, text: heading.text }))
+    }
+    role={entry.data.role}
+    updatedAt={entry.data.updatedAt}
+    status={status}
+    tags={entry.data.tags}
+    links={entry.data.links}
+    alternatePath={alternatePath}
+    switchHref={switchHref}
+    switchFallback={!alternatePath}
+    showResources={
+      !(
+        (entry.collection === "research" && entry.data.study) ||
+        (entry.collection === "software" && entry.data.caseStudy)
+      )
+    }
+  >
+    {entry.collection === "publications" && (
+      <div class="publication-citation">
+        {entry.data.originalTitle !== entry.data.title && (
+          <p lang="en">{entry.data.originalTitle}</p>
+        )}
+        <p>{entry.data.authors.join(", ")}</p>
+        <p>
+          {entry.data.venue} {entry.data.year}
+        </p>
+        {entry.data.citationNote && <p>{entry.data.citationNote}</p>}
+        {entry.data.doi && (
+          <p>
+            <a
+              href={`https://doi.org/${entry.data.doi}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              DOI: {entry.data.doi}
+            </a>
+          </p>
+        )}
+        {entry.data.url && (
+          <p>
+            <a href={entry.data.url}>{t.source} ↗</a>
+          </p>
+        )}
+      </div>
+    )}
+    {entry.collection === "research" && entry.data.study ? (
+      <ResearchDetail entry={entry} />
+    ) : entry.collection === "software" && entry.data.caseStudy ? (
+      <TechnicalDetail entry={entry} />
+    ) : (
+      <Content />
+    )}
+  </DetailLayout>
+) : (
+  <BaseLayout
+    locale={locale}
+    page={page}
+    title={pageTitle(page, locale)}
+    description={description}
+  >
+    {page === "about" && <ProfilePage locale={locale} />}
+    {(page === "research" || page === "academic") && (
+      <PortfolioOverview
+        locale={locale}
+        kind="academic"
+        legacy={page === "research"}
+      />
+    )}
+    {(page === "projects" || page === "technical") && (
+      <PortfolioOverview
+        locale={locale}
+        kind="technical"
+        legacy={page === "projects"}
+      />
+    )}
+    {page === "publications" && (
+      <Collection locale={locale} collection="publications" />
+    )}
+    {(page === "contact" || page === "cv" || page === "credits") && (
+      <InfoPage locale={locale} page={page} />
+    )}
+  </BaseLayout>
+)}

@@ -1,0 +1,59 @@
+---
+import type { Locale } from "../../lib/routes";
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+---
+
+<div class="archive-graphic" aria-hidden="true">
+  <div class="graphic-grid"></div>
+  <span class="graphic-cross cross-one">＋</span>
+  <span class="graphic-cross cross-two">＋</span>
+  <div class="file-stack">
+    <div class="archive-file file-back">
+      <span class="file-tab">05 / CV</span>
+    </div>
+    <div class="archive-file file-mid">
+      <span class="file-tab">04 / PROFILE</span>
+    </div>
+    <div class="archive-file file-third">
+      <span class="file-tab">03 / PUBLICATIONS</span>
+    </div>
+    <div class="archive-file file-second">
+      <span class="file-tab">02 / SOFTWARE</span>
+    </div>
+    <div class="archive-file file-front">
+      <div class="file-topline">
+        <span>01 / RESEARCH</span>
+        <span>BA—R</span>
+      </div>
+      <div class="data-motif">
+        {Array.from({ length: 48 }, (_, i) => (
+          <span
+            class:list={{
+              filled: [
+                2, 3, 7, 9, 10, 14, 18, 19, 20, 25, 26, 30, 32, 33, 34, 38, 43,
+                44,
+              ].includes(i),
+              warm: [11, 22, 35].includes(i),
+            }}
+          />
+        ))}
+      </div>
+      <div class="file-caption">
+        <span>
+          BIOINFORMATICS
+          <br />
+          <strong>RESEARCH ARCHIVE</strong>
+        </span>
+        <span class="file-arrow">↗</span>
+      </div>
+      <div class="file-baseline"></div>
+    </div>
+  </div>
+  <div class="graphic-caption">
+    <span>FIG. 01 — {locale === "en" ? "ARCHIVE STUDY" : "档案构图"}</span>
+    <span>INDEX / A—E</span>
+  </div>
+</div>

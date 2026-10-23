@@ -1,0 +1,180 @@
+.area-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin: 2rem 0 3rem;
+}
+.media-slot {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  border: 1px dashed var(--color-line);
+  color: var(--color-muted);
+}
+.media-slot small {
+  font-family: monospace;
+  letter-spacing: 0.12em;
+}
+.media-slot h3 {
+  margin: 0.6rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.media-slot p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.area-nav a {
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--color-line);
+  font-size: 0.85rem;
+}
+.portfolio-group {
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--color-line);
+  scroll-margin-top: 6rem;
+}
+.portfolio-group-heading {
+  max-width: 48rem;
+  margin-bottom: 1.8rem;
+}
+.portfolio-group-heading h2 {
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  margin: 0.7rem 0;
+  font-weight: 500;
+}
+.portfolio-group-heading p,
+.portfolio-card > p {
+  color: var(--color-muted);
+}
+.portfolio-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+.portfolio-card {
+  padding: clamp(1.3rem, 3vw, 2.2rem);
+  border: 1px solid var(--color-line);
+  background: rgba(255, 255, 255, 0.38);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+.portfolio-card h3 {
+  font-size: clamp(1.25rem, 2.5vw, 1.7rem);
+  line-height: 1.35;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.portfolio-card h3 a {
+  text-decoration: none;
+}
+.portfolio-card .text-link {
+  margin-top: auto;
+  padding-top: 0.7rem;
+}
+.portfolio-card .status-label {
+  align-self: flex-start;
+  font-size: 0.75rem;
+}
+.evidence-notice {
+  overflow-wrap: anywhere;
+  border-left: 3px solid var(--color-accent);
+  padding: 1.2rem 1.5rem;
+  background: var(--accent-soft);
+  margin: 1.5rem 0 2.5rem;
+}
+.evidence-notice p {
+  margin: 0.5rem 0 0;
+}
+.pending-note {
+  color: var(--color-muted);
+  border-left: 1px solid var(--color-line);
+  padding-left: 1rem;
+}
+.workflow-figure {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border: 1px solid var(--color-line);
+}
+.workflow-figure ol {
+  padding: 0;
+  list-style: none;
+  counter-reset: flow;
+  display: grid;
+  gap: 1.5rem;
+}
+.workflow-figure li {
+  counter-increment: flow;
+  padding: 1rem;
+  border: 1px solid var(--color-line);
+  background: rgba(255, 255, 255, 0.5);
+  position: relative;
+}
+.workflow-figure li::before {
+  content: counter(flow, decimal-leading-zero) " / ";
+  color: var(--color-accent);
+  font-family: monospace;
+}
+.workflow-figure li:not(:last-child)::after {
+  content: "↓";
+  position: absolute;
+  bottom: -1.6rem;
+  left: 50%;
+  color: var(--color-accent);
+}
+.workflow-figure figcaption,
+.figure-gallery figcaption {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-top: 1rem;
+}
+.figure-gallery figure {
+  overflow-wrap: anywhere;
+  border: 1px solid var(--color-line);
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+.figure-gallery figcaption > small {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+.figure-gallery figcaption > strong {
+  display: block;
+  margin-top: 0.45rem;
+}
+.figure-gallery img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #eeede7;
+}
+.figure-gallery a:has(img) {
+  cursor: zoom-in;
+  display: block;
+}
+.figure-gallery img.portrait {
+  max-width: 390px;
+  margin-inline: auto;
+}
+.stack-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0 !important;
+  list-style: none !important;
+}
+.stack-list li {
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--color-line);
+}
+@media (max-width: 700px) {
+  .portfolio-cards {
+    grid-template-columns: 1fr;
+  }
+  .evidence-notice {
+    padding: 1rem;
+  }
+}

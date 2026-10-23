@@ -1,0 +1,167 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import { ui } from "../i18n/ui";
+import {
+  pagePath,
+  collectionPage,
+  type Locale,
+  type CollectionName,
+} from "../lib/routes";
+interface Props {
+  locale: Locale;
+  collection: CollectionName;
+  title: string;
+  summary: string;
+  template?: boolean;
+  headings: { id: string; text: string }[];
+  role?: string;
+  updatedAt?: string;
+  status?: string;
+  tags?: string[];
+  links?: { label: string; url: string }[];
+  alternatePath?: string | null;
+  switchHref?: string;
+  switchFallback?: boolean;
+  showResources?: boolean;
+}
+const {
+  locale,
+  collection,
+  title,
+  summary,
+  template = false,
+  headings,
+  role,
+  updatedAt,
+  status,
+  tags = [],
+  links = [],
+  alternatePath,
+  switchHref,
+  switchFallback,
+  showResources = true,
+} = Astro.props;
+const t = ui(locale);
+const statusLabels: Record<string, [string, string]> = {
+  prototype: ["Prototype / preview", "原型 / 预览版"],
+  maintained: ["Maintained", "持续维护"],
+  archived: ["Archived", "已归档"],
+  ongoing: ["Ongoing", "进行中"],
+  completed: ["Completed", "已完成"],
+  paused: ["Paused", "暂停"],
+  preprint: ["Preprint", "预印本"],
+  submitted: ["Submitted", "已投稿"],
+  accepted: ["Accepted", "已接收"],
+  published: ["Published", "已发表"],
+};
+const statusText = status
+  ? (statusLabels[status]?.[locale === "en" ? 0 : 1] ?? status)
+  : undefined;
+const page =
+  collection === "research"
+    ? "academic"
+    : collection === "software"
+      ? "technical"
+      : collectionPage(collection);
+---
+
+<BaseLayout
+  locale={locale}
+  page={page}
+  title={title}
+  description={summary}
+  noindex={template}
+  alternatePath={alternatePath}
+  switchHref={switchHref}
+  switchFallback={switchFallback}
+>
+  <div class="detail-top">
+    <a class="text-link" href={pagePath(page, locale)}>
+      ← {t.back}
+    </a>
+    <span class="eyebrow">{t[page]}</span>
+  </div>
+  {template && (
+    <aside class="template-banner">
+      <strong>{t.templateLabel}</strong>
+      <p>{t.templateNotice}</p>
+    </aside>
+  )}
+  <header class="detail-heading">
+    <div class="tag-list">
+      {tags.map((tag) => (
+        <span>{tag}</span>
+      ))}
+    </div>
+    <h1>{title}</h1>
+    <p class="lead">{summary}</p>
+    <dl class="metadata-grid">
+      {(role || template) && (
+        <div>
+          <dt>{t.role}</dt>
+          <dd>{role ?? t.rolePlaceholder}</dd>
+        </div>
+      )}
+      {(updatedAt || template) && (
+        <div>
+          <dt>
+            {template ? t.period : locale === "en" ? "Updated" : "更新日期"}
+          </dt>
+          <dd>
+            {updatedAt ? (
+              <time datetime={updatedAt}>{updatedAt}</time>
+            ) : (
+              t.periodPlaceholder
+            )}
+          </dd>
+        </div>
+      )}
+      {(status || template) && (
+        <div>
+          <dt>{t.status}</dt>
+          <dd>{statusText ?? t.statusPlaceholder}</dd>
+        </div>
+      )}
+    </dl>
+  </header>
+  <div class="detail-grid">
+    <aside class="toc">
+      <details open>
+        <summary>{t.onPage}</summary>
+        <nav aria-label={t.onPage}>
+          {headings.map((heading, i) => (
+            <a href={`#${heading.id}`}>
+              <span class="mono">{String(i + 1).padStart(2, "0")}</span>
+              {heading.text}
+            </a>
+          ))}
+          {showResources && (
+            <a href="#archive-resources">
+              <span class="mono">↗</span>
+              {t.resources}
+            </a>
+          )}
+        </nav>
+      </details>
+    </aside>
+    <article class="prose">
+      <slot />
+      {showResources && (
+        <section id="archive-resources">
+          <h2>{t.resources}</h2>
+          {links.length ? (
+            <ul>
+              {links.map((link) => (
+                <li>
+                  <a href={link.url}>{link.label} ↗</a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>{t.resourcesPlaceholder}</p>
+          )}
+        </section>
+      )}
+    </article>
+  </div>
+</BaseLayout>

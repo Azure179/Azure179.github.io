@@ -1,0 +1,95 @@
+---
+import Header from "../components/site/Header.astro";
+import Footer from "../components/site/Footer.astro";
+import FigureLightbox from "../components/portfolio/FigureLightbox.astro";
+import {
+  pagePath,
+  oppositeLocale,
+  type Locale,
+  type PageKey,
+} from "../lib/routes";
+import { ui } from "../i18n/ui";
+import "../styles/global.css";
+interface Props {
+  locale: Locale;
+  page: PageKey;
+  title: string;
+  description: string;
+  noindex?: boolean;
+  alternatePath?: string | null;
+  switchHref?: string;
+  switchFallback?: boolean;
+}
+const {
+  locale,
+  page,
+  title,
+  description,
+  noindex = false,
+  switchHref,
+  switchFallback,
+} = Astro.props;
+const alternatePath =
+  Astro.props.alternatePath === undefined
+    ? pagePath(page, oppositeLocale(locale))
+    : Astro.props.alternatePath;
+const canonical = new URL(
+  Astro.url.pathname === "/404/" ? "/404.html" : Astro.url.pathname,
+  Astro.site,
+);
+const alternate = alternatePath ? new URL(alternatePath, Astro.site) : null;
+const english = locale === "en" ? canonical : alternate;
+---
+
+<!doctype html>
+<html lang={locale === "en" ? "en" : "zh-CN"}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f3ef" />
+    <title>{title} — BIOINFORMATICS ARCHIVE</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={canonical} />
+    {alternate && (
+      <>
+        <link
+          rel="alternate"
+          hreflang={locale === "en" ? "en" : "zh-CN"}
+          href={canonical}
+        />
+        <link
+          rel="alternate"
+          hreflang={locale === "en" ? "zh-CN" : "en"}
+          href={alternate}
+        />
+        {english && (
+          <link rel="alternate" hreflang="x-default" href={english} />
+        )}
+      </>
+    )}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={`${title} — BIOINFORMATICS ARCHIVE`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">
+      {ui(locale).skip}
+    </a>
+    <div class="site-wrap">
+      <Header
+        locale={locale}
+        page={page}
+        switchHref={switchHref}
+        switchFallback={switchFallback}
+      />
+      <main id="main-content" tabindex="-1">
+        <slot />
+      </main>
+      <Footer locale={locale} />
+    </div>
+    <FigureLightbox locale={locale} />
+  </body>
+</html>

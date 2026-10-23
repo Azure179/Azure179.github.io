@@ -1,0 +1,54 @@
+[
+  {
+    "file": "src/scene/archive-waves.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/ArchiveScene.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/bootstrap.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/CassetteKit.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/FolderField.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/matrix-layout.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/MatrixField.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/motion.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/reader.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/resources.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/state.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/types.ts",
+    "unchanged": true
+  },
+  {
+    "file": "src/scene/wheel-navigation.ts",
+    "unchanged": true
+  }
+]

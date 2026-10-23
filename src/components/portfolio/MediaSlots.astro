@@ -1,0 +1,15 @@
+---
+interface Props {
+  slots: { id: string; title: string; description: string }[];
+  locale: "en" | "zh";
+}
+const { slots, locale } = Astro.props;
+---
+
+{slots.map((slot) => (
+  <aside class="media-slot" id={`media-slot-${slot.id}`}>
+    <small>{locale === "en" ? "ASSET PENDING" : "素材待补"}</small>
+    <h3>{slot.title}</h3>
+    <p>{slot.description}</p>
+  </aside>
+))}

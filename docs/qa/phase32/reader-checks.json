@@ -1,0 +1,678 @@
+[
+  {
+    "locale": "en",
+    "project": "black-porgy-sex-reversal",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/academic/black-porgy-sex-reversal/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-background",
+      "reader-design",
+      "reader-findings",
+      "reader-contributions"
+    ],
+    "status": "",
+    "textLength": 1314,
+    "title": "Epigenetic Remodeling During Natural Sex Change in Black Porgy"
+  },
+  {
+    "locale": "en",
+    "project": "black-porgy-sex-reversal",
+    "section": "workflow",
+    "pass": true,
+    "hash": "#archive/academic/black-porgy-sex-reversal/workflow/read",
+    "sections": [
+      "reader-analysis"
+    ],
+    "status": "",
+    "textLength": 909,
+    "title": "Epigenetic Remodeling During Natural Sex Change in Black Porgy"
+  },
+  {
+    "locale": "en",
+    "project": "black-porgy-sex-reversal",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/academic/black-porgy-sex-reversal/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 695,
+    "title": "Epigenetic Remodeling During Natural Sex Change in Black Porgy"
+  },
+  {
+    "locale": "en",
+    "project": "black-porgy-sex-reversal",
+    "section": "publications",
+    "pass": true,
+    "hash": "#archive/academic/black-porgy-sex-reversal/publications/read",
+    "sections": [
+      "reader-publications"
+    ],
+    "status": "",
+    "textLength": 652,
+    "title": "Epigenetic Remodeling During Natural Sex Change in Black Porgy"
+  },
+  {
+    "locale": "en",
+    "project": "fish-t2t-genome",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/academic/fish-t2t-genome/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-background",
+      "reader-design",
+      "reader-findings",
+      "reader-contributions"
+    ],
+    "status": "",
+    "textLength": 1351,
+    "title": "Reference-Quality Genome Resources for Greater Amberjack"
+  },
+  {
+    "locale": "en",
+    "project": "fish-t2t-genome",
+    "section": "workflow",
+    "pass": true,
+    "hash": "#archive/academic/fish-t2t-genome/workflow/read",
+    "sections": [
+      "reader-analysis"
+    ],
+    "status": "",
+    "textLength": 905,
+    "title": "Reference-Quality Genome Resources for Greater Amberjack"
+  },
+  {
+    "locale": "en",
+    "project": "fish-t2t-genome",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/academic/fish-t2t-genome/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 690,
+    "title": "Reference-Quality Genome Resources for Greater Amberjack"
+  },
+  {
+    "locale": "en",
+    "project": "fish-t2t-genome",
+    "section": "publications",
+    "pass": true,
+    "hash": "#archive/academic/fish-t2t-genome/publications/read",
+    "sections": [
+      "reader-publications"
+    ],
+    "status": "",
+    "textLength": 556,
+    "title": "Reference-Quality Genome Resources for Greater Amberjack"
+  },
+  {
+    "locale": "en",
+    "project": "fish-dnmt-family",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/academic/fish-dnmt-family/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-background",
+      "reader-design",
+      "reader-findings",
+      "reader-contributions"
+    ],
+    "status": "",
+    "textLength": 1452,
+    "title": "Evolution and Expression of DNA Methyltransferases in Fish"
+  },
+  {
+    "locale": "en",
+    "project": "fish-dnmt-family",
+    "section": "workflow",
+    "pass": true,
+    "hash": "#archive/academic/fish-dnmt-family/workflow/read",
+    "sections": [
+      "reader-analysis"
+    ],
+    "status": "",
+    "textLength": 941,
+    "title": "Evolution and Expression of DNA Methyltransferases in Fish"
+  },
+  {
+    "locale": "en",
+    "project": "fish-dnmt-family",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/academic/fish-dnmt-family/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 1244,
+    "title": "Evolution and Expression of DNA Methyltransferases in Fish"
+  },
+  {
+    "locale": "en",
+    "project": "fish-dnmt-family",
+    "section": "publications",
+    "pass": true,
+    "hash": "#archive/academic/fish-dnmt-family/publications/read",
+    "sections": [
+      "reader-publications"
+    ],
+    "status": "",
+    "textLength": 574,
+    "title": "Evolution and Expression of DNA Methyltransferases in Fish"
+  },
+  {
+    "locale": "en",
+    "project": "tilapia-eccdna",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/academic/tilapia-eccdna/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-background",
+      "reader-design",
+      "reader-findings",
+      "reader-contributions"
+    ],
+    "status": "",
+    "textLength": 1207,
+    "title": "Exploring eccDNA and Muscle-Associated Transcription in Tilapia"
+  },
+  {
+    "locale": "en",
+    "project": "tilapia-eccdna",
+    "section": "workflow",
+    "pass": true,
+    "hash": "#archive/academic/tilapia-eccdna/workflow/read",
+    "sections": [
+      "reader-analysis"
+    ],
+    "status": "",
+    "textLength": 843,
+    "title": "Exploring eccDNA and Muscle-Associated Transcription in Tilapia"
+  },
+  {
+    "locale": "en",
+    "project": "tilapia-eccdna",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/academic/tilapia-eccdna/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 622,
+    "title": "Exploring eccDNA and Muscle-Associated Transcription in Tilapia"
+  },
+  {
+    "locale": "en",
+    "project": "tilapia-eccdna",
+    "section": "publications",
+    "pass": true,
+    "hash": "#archive/academic/tilapia-eccdna/publications/read",
+    "sections": [
+      "reader-publications"
+    ],
+    "status": "",
+    "textLength": 223,
+    "title": "Exploring eccDNA and Muscle-Associated Transcription in Tilapia"
+  },
+  {
+    "locale": "en",
+    "project": "llm-rnaseq-platform",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/technical/llm-rnaseq-platform/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-problem",
+      "reader-solution",
+      "reader-stack"
+    ],
+    "status": "",
+    "textLength": 2348,
+    "title": "LLM-driven RNA-seq Analysis Platform"
+  },
+  {
+    "locale": "en",
+    "project": "llm-rnaseq-platform",
+    "section": "architecture",
+    "pass": true,
+    "hash": "#archive/technical/llm-rnaseq-platform/architecture/read",
+    "sections": [
+      "reader-architecture",
+      "reader-implementation"
+    ],
+    "status": "",
+    "textLength": 3138,
+    "title": "LLM-driven RNA-seq Analysis Platform"
+  },
+  {
+    "locale": "en",
+    "project": "llm-rnaseq-platform",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/technical/llm-rnaseq-platform/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 2251,
+    "title": "LLM-driven RNA-seq Analysis Platform"
+  },
+  {
+    "locale": "en",
+    "project": "llm-rnaseq-platform",
+    "section": "repository",
+    "pass": true,
+    "hash": "#archive/technical/llm-rnaseq-platform/repository/read",
+    "sections": [
+      "reader-validation",
+      "reader-links"
+    ],
+    "status": "",
+    "textLength": 1179,
+    "title": "LLM-driven RNA-seq Analysis Platform"
+  },
+  {
+    "locale": "en",
+    "project": "bioinformatics-archive",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/technical/bioinformatics-archive/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-problem",
+      "reader-solution",
+      "reader-stack"
+    ],
+    "status": "",
+    "textLength": 1674,
+    "title": "BIOINFORMATICS ARCHIVE — Interactive Research Portfolio"
+  },
+  {
+    "locale": "en",
+    "project": "bioinformatics-archive",
+    "section": "architecture",
+    "pass": true,
+    "hash": "#archive/technical/bioinformatics-archive/architecture/read",
+    "sections": [
+      "reader-architecture",
+      "reader-implementation"
+    ],
+    "status": "",
+    "textLength": 2478,
+    "title": "BIOINFORMATICS ARCHIVE — Interactive Research Portfolio"
+  },
+  {
+    "locale": "en",
+    "project": "bioinformatics-archive",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/technical/bioinformatics-archive/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 1439,
+    "title": "BIOINFORMATICS ARCHIVE — Interactive Research Portfolio"
+  },
+  {
+    "locale": "en",
+    "project": "bioinformatics-archive",
+    "section": "repository",
+    "pass": true,
+    "hash": "#archive/technical/bioinformatics-archive/repository/read",
+    "sections": [
+      "reader-validation",
+      "reader-links"
+    ],
+    "status": "",
+    "textLength": 711,
+    "title": "BIOINFORMATICS ARCHIVE — Interactive Research Portfolio"
+  },
+  {
+    "locale": "zh",
+    "project": "black-porgy-sex-reversal",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/academic/black-porgy-sex-reversal/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-background",
+      "reader-design",
+      "reader-findings",
+      "reader-contributions"
+    ],
+    "status": "",
+    "textLength": 426,
+    "title": "黑鲷自然性逆转中的表观遗传重塑"
+  },
+  {
+    "locale": "zh",
+    "project": "black-porgy-sex-reversal",
+    "section": "workflow",
+    "pass": true,
+    "hash": "#archive/academic/black-porgy-sex-reversal/workflow/read",
+    "sections": [
+      "reader-analysis"
+    ],
+    "status": "",
+    "textLength": 329,
+    "title": "黑鲷自然性逆转中的表观遗传重塑"
+  },
+  {
+    "locale": "zh",
+    "project": "black-porgy-sex-reversal",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/academic/black-porgy-sex-reversal/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 234,
+    "title": "黑鲷自然性逆转中的表观遗传重塑"
+  },
+  {
+    "locale": "zh",
+    "project": "black-porgy-sex-reversal",
+    "section": "publications",
+    "pass": true,
+    "hash": "#archive/academic/black-porgy-sex-reversal/publications/read",
+    "sections": [
+      "reader-publications"
+    ],
+    "status": "",
+    "textLength": 439,
+    "title": "黑鲷自然性逆转中的表观遗传重塑"
+  },
+  {
+    "locale": "zh",
+    "project": "fish-t2t-genome",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/academic/fish-t2t-genome/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-background",
+      "reader-design",
+      "reader-findings",
+      "reader-contributions"
+    ],
+    "status": "",
+    "textLength": 463,
+    "title": "高体鰤高质量参考基因组资源"
+  },
+  {
+    "locale": "zh",
+    "project": "fish-t2t-genome",
+    "section": "workflow",
+    "pass": true,
+    "hash": "#archive/academic/fish-t2t-genome/workflow/read",
+    "sections": [
+      "reader-analysis"
+    ],
+    "status": "",
+    "textLength": 354,
+    "title": "高体鰤高质量参考基因组资源"
+  },
+  {
+    "locale": "zh",
+    "project": "fish-t2t-genome",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/academic/fish-t2t-genome/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 225,
+    "title": "高体鰤高质量参考基因组资源"
+  },
+  {
+    "locale": "zh",
+    "project": "fish-t2t-genome",
+    "section": "publications",
+    "pass": true,
+    "hash": "#archive/academic/fish-t2t-genome/publications/read",
+    "sections": [
+      "reader-publications"
+    ],
+    "status": "",
+    "textLength": 396,
+    "title": "高体鰤高质量参考基因组资源"
+  },
+  {
+    "locale": "zh",
+    "project": "fish-dnmt-family",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/academic/fish-dnmt-family/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-background",
+      "reader-design",
+      "reader-findings",
+      "reader-contributions"
+    ],
+    "status": "",
+    "textLength": 515,
+    "title": "鱼类 DNA 甲基转移酶的演化与表达"
+  },
+  {
+    "locale": "zh",
+    "project": "fish-dnmt-family",
+    "section": "workflow",
+    "pass": true,
+    "hash": "#archive/academic/fish-dnmt-family/workflow/read",
+    "sections": [
+      "reader-analysis"
+    ],
+    "status": "",
+    "textLength": 331,
+    "title": "鱼类 DNA 甲基转移酶的演化与表达"
+  },
+  {
+    "locale": "zh",
+    "project": "fish-dnmt-family",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/academic/fish-dnmt-family/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 647,
+    "title": "鱼类 DNA 甲基转移酶的演化与表达"
+  },
+  {
+    "locale": "zh",
+    "project": "fish-dnmt-family",
+    "section": "publications",
+    "pass": true,
+    "hash": "#archive/academic/fish-dnmt-family/publications/read",
+    "sections": [
+      "reader-publications"
+    ],
+    "status": "",
+    "textLength": 402,
+    "title": "鱼类 DNA 甲基转移酶的演化与表达"
+  },
+  {
+    "locale": "zh",
+    "project": "tilapia-eccdna",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/academic/tilapia-eccdna/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-background",
+      "reader-design",
+      "reader-findings",
+      "reader-contributions"
+    ],
+    "status": "",
+    "textLength": 348,
+    "title": "罗非鱼 eccDNA 与肌肉相关转录变化探索"
+  },
+  {
+    "locale": "zh",
+    "project": "tilapia-eccdna",
+    "section": "workflow",
+    "pass": true,
+    "hash": "#archive/academic/tilapia-eccdna/workflow/read",
+    "sections": [
+      "reader-analysis"
+    ],
+    "status": "",
+    "textLength": 301,
+    "title": "罗非鱼 eccDNA 与肌肉相关转录变化探索"
+  },
+  {
+    "locale": "zh",
+    "project": "tilapia-eccdna",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/academic/tilapia-eccdna/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 217,
+    "title": "罗非鱼 eccDNA 与肌肉相关转录变化探索"
+  },
+  {
+    "locale": "zh",
+    "project": "tilapia-eccdna",
+    "section": "publications",
+    "pass": true,
+    "hash": "#archive/academic/tilapia-eccdna/publications/read",
+    "sections": [
+      "reader-publications"
+    ],
+    "status": "",
+    "textLength": 81,
+    "title": "罗非鱼 eccDNA 与肌肉相关转录变化探索"
+  },
+  {
+    "locale": "zh",
+    "project": "llm-rnaseq-platform",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/technical/llm-rnaseq-platform/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-problem",
+      "reader-solution",
+      "reader-stack"
+    ],
+    "status": "",
+    "textLength": 875,
+    "title": "LLM 驱动的 RNA-seq 分析平台"
+  },
+  {
+    "locale": "zh",
+    "project": "llm-rnaseq-platform",
+    "section": "architecture",
+    "pass": true,
+    "hash": "#archive/technical/llm-rnaseq-platform/architecture/read",
+    "sections": [
+      "reader-architecture",
+      "reader-implementation"
+    ],
+    "status": "",
+    "textLength": 1152,
+    "title": "LLM 驱动的 RNA-seq 分析平台"
+  },
+  {
+    "locale": "zh",
+    "project": "llm-rnaseq-platform",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/technical/llm-rnaseq-platform/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 741,
+    "title": "LLM 驱动的 RNA-seq 分析平台"
+  },
+  {
+    "locale": "zh",
+    "project": "llm-rnaseq-platform",
+    "section": "repository",
+    "pass": true,
+    "hash": "#archive/technical/llm-rnaseq-platform/repository/read",
+    "sections": [
+      "reader-validation",
+      "reader-links"
+    ],
+    "status": "",
+    "textLength": 559,
+    "title": "LLM 驱动的 RNA-seq 分析平台"
+  },
+  {
+    "locale": "zh",
+    "project": "bioinformatics-archive",
+    "section": "overview",
+    "pass": true,
+    "hash": "#archive/technical/bioinformatics-archive/overview/read",
+    "sections": [
+      "reader-overview",
+      "reader-problem",
+      "reader-solution",
+      "reader-stack"
+    ],
+    "status": "",
+    "textLength": 570,
+    "title": "BIOINFORMATICS ARCHIVE — 交互式科研作品集"
+  },
+  {
+    "locale": "zh",
+    "project": "bioinformatics-archive",
+    "section": "architecture",
+    "pass": true,
+    "hash": "#archive/technical/bioinformatics-archive/architecture/read",
+    "sections": [
+      "reader-architecture",
+      "reader-implementation"
+    ],
+    "status": "",
+    "textLength": 973,
+    "title": "BIOINFORMATICS ARCHIVE — 交互式科研作品集"
+  },
+  {
+    "locale": "zh",
+    "project": "bioinformatics-archive",
+    "section": "figures",
+    "pass": true,
+    "hash": "#archive/technical/bioinformatics-archive/figures/read",
+    "sections": [
+      "reader-figures"
+    ],
+    "status": "",
+    "textLength": 479,
+    "title": "BIOINFORMATICS ARCHIVE — 交互式科研作品集"
+  },
+  {
+    "locale": "zh",
+    "project": "bioinformatics-archive",
+    "section": "repository",
+    "pass": true,
+    "hash": "#archive/technical/bioinformatics-archive/repository/read",
+    "sections": [
+      "reader-validation",
+      "reader-links"
+    ],
+    "status": "",
+    "textLength": 327,
+    "title": "BIOINFORMATICS ARCHIVE — 交互式科研作品集"
+  }
+]

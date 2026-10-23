@@ -1,0 +1,290 @@
+[
+  {
+    "locale": "zh",
+    "project": "black-porgy-sex-reversal",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "black-porgy-sex-reversal",
+    "section": "workflow",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "black-porgy-sex-reversal",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "black-porgy-sex-reversal",
+    "section": "publications",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "fish-t2t-genome",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "fish-t2t-genome",
+    "section": "workflow",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "fish-t2t-genome",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "fish-t2t-genome",
+    "section": "publications",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "fish-dnmt-family",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "fish-dnmt-family",
+    "section": "workflow",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "fish-dnmt-family",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "fish-dnmt-family",
+    "section": "publications",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "tilapia-eccdna",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "tilapia-eccdna",
+    "section": "workflow",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "tilapia-eccdna",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "tilapia-eccdna",
+    "section": "publications",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "llm-rnaseq-platform",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "llm-rnaseq-platform",
+    "section": "architecture",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "llm-rnaseq-platform",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "llm-rnaseq-platform",
+    "section": "repository",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "bioinformatics-archive",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "bioinformatics-archive",
+    "section": "architecture",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "bioinformatics-archive",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "zh",
+    "project": "bioinformatics-archive",
+    "section": "repository",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "black-porgy-sex-reversal",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "black-porgy-sex-reversal",
+    "section": "workflow",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "black-porgy-sex-reversal",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "black-porgy-sex-reversal",
+    "section": "publications",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "fish-t2t-genome",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "fish-t2t-genome",
+    "section": "workflow",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "fish-t2t-genome",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "fish-t2t-genome",
+    "section": "publications",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "fish-dnmt-family",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "fish-dnmt-family",
+    "section": "workflow",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "fish-dnmt-family",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "fish-dnmt-family",
+    "section": "publications",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "tilapia-eccdna",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "tilapia-eccdna",
+    "section": "workflow",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "tilapia-eccdna",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "tilapia-eccdna",
+    "section": "publications",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "llm-rnaseq-platform",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "llm-rnaseq-platform",
+    "section": "architecture",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "llm-rnaseq-platform",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "llm-rnaseq-platform",
+    "section": "repository",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "bioinformatics-archive",
+    "section": "overview",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "bioinformatics-archive",
+    "section": "architecture",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "bioinformatics-archive",
+    "section": "figures",
+    "pass": true
+  },
+  {
+    "locale": "en",
+    "project": "bioinformatics-archive",
+    "section": "repository",
+    "pass": true
+  }
+]

@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-23",
+  "data": "Synthetic demonstration data: 30 genes, 6 samples; annotation associations are synthetic, not biological findings.",
+  "llm_calls": 0,
+  "steps": [
+    {
+      "skill": "deg",
+      "http_status": 200,
+      "status": "succeeded",
+      "error": null,
+      "outputs": {
+        "deg_csv": "results/workflows/994b99284b234fcda788e832baea311d/steps/001/skill/deg_results.csv",
+        "filtered_csv": "results/workflows/994b99284b234fcda788e832baea311d/steps/001/skill/deg_filtered.csv",
+        "summary_json": "results/workflows/994b99284b234fcda788e832baea311d/steps/001/skill/summary.json"
+      }
+    },
+    {
+      "skill": "pca",
+      "http_status": 200,
+      "status": "succeeded",
+      "error": null,
+      "outputs": {
+        "coordinates": "results/workflows/16c27e0dc2614184bb77ee735bf5878e/steps/001/skill/pca_coordinates.csv",
+        "variance": "results/workflows/16c27e0dc2614184bb77ee735bf5878e/steps/001/skill/pca_variance.json",
+        "plot": "results/workflows/16c27e0dc2614184bb77ee735bf5878e/steps/001/skill/pca_plot.png",
+        "summary_json": "results/workflows/16c27e0dc2614184bb77ee735bf5878e/steps/001/skill/summary.json"
+      }
+    },
+    {
+      "skill": "volcano",
+      "http_status": 200,
+      "status": "succeeded",
+      "error": null,
+      "outputs": {
+        "plot": "results/workflows/ccc4383df6024e56b33edddb6ab0233f/steps/001/skill/volcano_plot.png",
+        "plot_data": "results/workflows/ccc4383df6024e56b33edddb6ab0233f/steps/001/skill/volcano_plot_data.csv",
+        "summary_json": "results/workflows/ccc4383df6024e56b33edddb6ab0233f/steps/001/skill/summary.json"
+      }
+    },
+    {
+      "skill": "heatmap",
+      "http_status": 200,
+      "status": "succeeded",
+      "error": null,
+      "outputs": {
+        "plot": "results/workflows/ca61fc3434f4438588fea2642fafe262/steps/001/skill/heatmap.png",
+        "matrix": "results/workflows/ca61fc3434f4438588fea2642fafe262/steps/001/skill/heatmap_matrix.csv",
+        "selected_genes": "results/workflows/ca61fc3434f4438588fea2642fafe262/steps/001/skill/selected_genes.csv",
+        "normalized_expression": "results/workflows/ca61fc3434f4438588fea2642fafe262/steps/001/skill/normalized_expression.csv",
+        "summary_json": "results/workflows/ca61fc3434f4438588fea2642fafe262/steps/001/skill/summary.json"
+      }
+    },
+    {
+      "skill": "go",
+      "http_status": 200,
+      "status": "succeeded",
+      "error": null,
+      "outputs": {
+        "enrichment": "results/workflows/1ac7284a31e246f6b7871d3c39047d9a/steps/001/skill/go_enrichment.csv",
+        "all_results": "results/workflows/1ac7284a31e246f6b7871d3c39047d9a/steps/001/skill/go_all_results.csv",
+        "dotplot": "results/workflows/1ac7284a31e246f6b7871d3c39047d9a/steps/001/skill/go_dotplot.png",
+        "barplot": "results/workflows/1ac7284a31e246f6b7871d3c39047d9a/steps/001/skill/go_barplot.png",
+        "query": "results/workflows/1ac7284a31e246f6b7871d3c39047d9a/steps/001/skill/query_used.csv",
+        "universe": "results/workflows/1ac7284a31e246f6b7871d3c39047d9a/steps/001/skill/universe_used.csv",
+        "mapping": "results/workflows/1ac7284a31e246f6b7871d3c39047d9a/steps/001/skill/mapping_used.csv",
+        "summary_json": "results/workflows/1ac7284a31e246f6b7871d3c39047d9a/steps/001/skill/summary.json"
+      }
+    },
+    {
+      "skill": "kegg",
+      "http_status": 200,
+      "status": "succeeded",
+      "error": null,
+      "outputs": {
+        "enrichment": "results/workflows/11156f7c1358457a8160e9bd6d467967/steps/001/skill/kegg_enrichment.csv",
+        "all_results": "results/workflows/11156f7c1358457a8160e9bd6d467967/steps/001/skill/kegg_all_results.csv",
+        "dotplot": "results/workflows/11156f7c1358457a8160e9bd6d467967/steps/001/skill/kegg_dotplot.png",
+        "barplot": "results/workflows/11156f7c1358457a8160e9bd6d467967/steps/001/skill/kegg_barplot.png",
+        "query": "results/workflows/11156f7c1358457a8160e9bd6d467967/steps/001/skill/query_used.csv",
+        "universe": "results/workflows/11156f7c1358457a8160e9bd6d467967/steps/001/skill/universe_used.csv",
+        "mapping": "results/workflows/11156f7c1358457a8160e9bd6d467967/steps/001/skill/mapping_used.csv",
+        "pathway_aliases": "results/workflows/11156f7c1358457a8160e9bd6d467967/steps/001/skill/pathway_id_aliases.csv",
+        "summary_json": "results/workflows/11156f7c1358457a8160e9bd6d467967/steps/001/skill/summary.json"
+      }
+    }
+  ],
+  "workflow": {
+    "http_status": 200,
+    "status": "succeeded",
+    "completed_steps": [
+      "deg",
+      "kegg_up",
+      "volcano"
+    ],
+    "detail": null
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-23",
+  "check": { "files": 61, "errors": 0, "warnings": 0, "hints": 0 },
+  "test": { "passed": 33, "failed": 0, "skipped": 0 },
+  "build": { "pages": 43, "passed": true, "warning": "Existing home-only Three.js chunk exceeds 500 kB minified." },
+  "checkSite": { "pages": 43, "internalLinksAndAnchors": 1439, "passed": true },
+  "formatCheck": { "passed": true },
+  "assets": { "referencedRasterDecoding": "passed", "referencedRasterDimensions": "matched", "svgXmlParsing": "passed" },
+  "browserReaderChecks": { "passed": 48, "record": "reader-checks.json" },
+  "notPerformed": ["Physical mobile device validation", "Formal screen-reader audit", "Live LLM requests", "GitHub Pages deployment"]
+}

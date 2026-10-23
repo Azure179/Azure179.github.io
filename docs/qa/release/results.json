@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-23",
+  "node": "24.20.0",
+  "npm": "11.19.0",
+  "typeCheck": {
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "tests": {
+    "passed": 34,
+    "failed": 0
+  },
+  "pages": 43,
+  "internalLinks": 1384,
+  "publicFiles": 48,
+  "artifactMiB": 4.54,
+  "readerChecks": {
+    "passed": 48,
+    "failed": 0
+  },
+  "freshNpmCi": {
+    "packages": 302,
+    "lockUnchanged": true,
+    "independentBuild": true
+  },
+  "sceneFilesUnchanged": 13,
+  "ownerPngFilesUnchanged": 9,
+  "formatCheck": "passed",
+  "workflowYamlFormat": "passed",
+  "deployed": false,
+  "pushed": false
+}

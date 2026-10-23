@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Home from "../../components/views/Home.astro";
+import { ui, pageTitle } from "../../i18n/ui";
+---
+
+<BaseLayout
+  locale="zh"
+  page="home"
+  title={pageTitle("home", "zh")}
+  description={ui("zh").heroDescription}
+>
+  <Home locale="zh" />
+</BaseLayout>

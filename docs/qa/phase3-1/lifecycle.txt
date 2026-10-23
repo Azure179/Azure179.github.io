@@ -1,0 +1,56 @@
+Phase 3.1 dense matrix · 2026-10-21 · local Edge QA harness
+PASS steady state stops frames
+PASS rapid switching keeps latest selection
+PASS dispose cycle 1
+PASS stable resources cycle 1
+PASS dispose cycle 2
+PASS stable resources cycle 2
+PASS dispose cycle 3
+PASS stable resources cycle 3
+PASS dispose cycle 4
+PASS stable resources cycle 4
+PASS dispose cycle 5
+PASS stable resources cycle 5
+PASS hidden page stops rendering
+PASS visible page resumes
+PASS context loss falls back to HTML
+PASS both portfolio HTML links survive
+PASS explicit retry rebuilds one context
+PASS four academic columns
+PASS up wraps to related publications
+PASS right changes project, not section
+PASS column memory restored
+PASS real publication empty state read from static detail
+PASS viewer pauses rendering
+PASS reader returns to matrix
+PASS matrix returns home
+PASS technical shares 2 by 4 matrix
+PASS technical axes and wrapping
+PASS architecture and workflow reuse real sections
+PASS matrix and shadow resources released on return home
+PASS escape cancels pending reader and repeated open
+PASS scroll-sized touch movement does not select
+PASS cancelled touch does not select
+PASS raycast touch selects technical without opening
+PASS second touch opens selected folder
+PASS no uncaught application errors
+{
+  "mode": "3d",
+  "level": "HOME",
+  "folder": "technical",
+  "project": "llm-rnaseq-platform",
+  "section": "overview",
+  "canvases": 1,
+  "activeContexts": 1,
+  "geometries": "4",
+  "textures": "3",
+  "frames": "39",
+  "moving": "true",
+  "paused": "false",
+  "pixels": "649800",
+  "width": 1912,
+  "scrollWidth": 1897,
+  "errors": [],
+  "engineRequests": 1
+}
+LIFECYCLE PASS

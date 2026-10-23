@@ -1,0 +1,74 @@
+---
+import ArchiveTerminal from "../archive/ArchiveTerminal.astro";
+import { archiveCopy } from "../../data/archive";
+import { archiveManifest } from "../../lib/archive-manifest";
+import { pagePath, type Locale } from "../../lib/routes";
+import { ui } from "../../i18n/ui";
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = archiveCopy(locale);
+const files = await archiveManifest(locale);
+---
+
+<section class="terminal-hero">
+  <div>
+    <p class="eyebrow">
+      <span class="signal" aria-hidden="true"></span>
+      {t.eyebrow}
+    </p>
+    <h1>
+      {t.title}
+      <br />
+      <em>{t.emphasis}</em>
+    </h1>
+  </div>
+  <p>{t.description}</p>
+</section>
+<ArchiveTerminal locale={locale} portfolios={files} />
+<section
+  class="terminal-directory archive-fallback"
+  id="archive-index"
+  tabindex="-1"
+  aria-labelledby="archive-title"
+>
+  <h2 id="archive-title">
+    {locale === "en" ? "Browse portfolios" : "浏览作品集"}
+  </h2>
+  <p>{t.directoryNote}</p>
+  <nav aria-label={t.directory}>
+    {files.map((file) => (
+      <a href={file.href}>
+        {file.title}
+        <span aria-hidden="true">↗</span>
+      </a>
+    ))}
+  </nav>
+</section>
+<section class="static-archive-tree archive-fallback">
+  {files.map((portfolio) => (
+    <details>
+      <summary>{portfolio.title}</summary>
+      {portfolio.projects.map((project) => (
+        <div>
+          <h3>
+            {project.index} / {project.title}
+          </h3>
+          <ul>
+            {project.sections.map((section) => (
+              <li>
+                <a href={section.href}>{section.title}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      {portfolio.id === "academic" && (
+        <a href={pagePath("publications", locale)}>
+          {ui(locale).publications} ↗
+        </a>
+      )}
+    </details>
+  ))}
+</section>

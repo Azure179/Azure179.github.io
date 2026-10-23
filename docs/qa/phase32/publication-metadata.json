@@ -1,0 +1,608 @@
+[
+  {
+    "DOI": "10.1016/j.aquaculture.2026.744391",
+    "title": [
+      "Methylomics and transcriptomics studies reveal epigenetic regulation during the natural sex change of protandrous black porgy (Acanthopagrus schlegelii)"
+    ],
+    "author": [
+      {
+        "given": "Jianchao",
+        "family": "Chen",
+        "sequence": "first",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Binwei",
+        "family": "Duan",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Chaofeng",
+        "family": "Jia",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Canbei",
+        "family": "You",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Rusong",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Qiong",
+        "family": "Shi",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kai",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "container-title": [
+      "Aquaculture"
+    ],
+    "volume": "626",
+    "issue": null,
+    "article-number": "744391",
+    "published": {
+      "date-parts": [
+        [
+          2027,
+          1
+        ]
+      ]
+    },
+    "published-print": {
+      "date-parts": [
+        [
+          2027,
+          1
+        ]
+      ]
+    },
+    "published-online": null,
+    "license": [
+      {
+        "start": {
+          "date-parts": [
+            [
+              2027,
+              1,
+              1
+            ]
+          ],
+          "date-time": "2027-01-01T00:00:00Z",
+          "timestamp": 1798761600000
+        },
+        "content-version": "tdm",
+        "delay-in-days": 0,
+        "URL": "https://www.elsevier.com/tdm/userlicense/1.0/"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2027,
+              1,
+              1
+            ]
+          ],
+          "date-time": "2027-01-01T00:00:00Z",
+          "timestamp": 1798761600000
+        },
+        "content-version": "tdm",
+        "delay-in-days": 0,
+        "URL": "https://www.elsevier.com/legal/tdmrep-license"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2027,
+              1,
+              1
+            ]
+          ],
+          "date-time": "2027-01-01T00:00:00Z",
+          "timestamp": 1798761600000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-017"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2027,
+              1,
+              1
+            ]
+          ],
+          "date-time": "2027-01-01T00:00:00Z",
+          "timestamp": 1798761600000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-037"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2027,
+              1,
+              1
+            ]
+          ],
+          "date-time": "2027-01-01T00:00:00Z",
+          "timestamp": 1798761600000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-012"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2027,
+              1,
+              1
+            ]
+          ],
+          "date-time": "2027-01-01T00:00:00Z",
+          "timestamp": 1798761600000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-029"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2027,
+              1,
+              1
+            ]
+          ],
+          "date-time": "2027-01-01T00:00:00Z",
+          "timestamp": 1798761600000
+        },
+        "content-version": "stm-asf",
+        "delay-in-days": 0,
+        "URL": "https://doi.org/10.15223/policy-004"
+      }
+    ],
+    "URL": "https://doi.org/10.1016/j.aquaculture.2026.744391"
+  },
+  {
+    "DOI": "10.1038/s41597-026-07505-8",
+    "title": [
+      "Telomere-to-telomere genome assemblies of male and female greater amberjack (Seriola dumerili)"
+    ],
+    "author": [
+      {
+        "given": "Binwei",
+        "family": "Duan",
+        "sequence": "first",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yunyun",
+        "family": "Lv",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Zelin",
+        "family": "Weng",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yanping",
+        "family": "Li",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Rusong",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jianchao",
+        "family": "Chen",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Shaosen",
+        "family": "Yang",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jinhui",
+        "family": "Wu",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kai",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "container-title": [
+      "Scientific Data"
+    ],
+    "volume": "13",
+    "issue": "1",
+    "article-number": "1226",
+    "published": {
+      "date-parts": [
+        [
+          2026,
+          5,
+          29
+        ]
+      ]
+    },
+    "published-print": null,
+    "published-online": {
+      "date-parts": [
+        [
+          2026,
+          5,
+          29
+        ]
+      ]
+    },
+    "license": [
+      {
+        "start": {
+          "date-parts": [
+            [
+              2026,
+              5,
+              29
+            ]
+          ],
+          "date-time": "2026-05-29T00:00:00Z",
+          "timestamp": 1780012800000
+        },
+        "content-version": "tdm",
+        "delay-in-days": 0,
+        "URL": "https://creativecommons.org/licenses/by-nc-nd/4.0"
+      },
+      {
+        "start": {
+          "date-parts": [
+            [
+              2026,
+              8,
+              25
+            ]
+          ],
+          "date-time": "2026-08-25T00:00:00Z",
+          "timestamp": 1787616000000
+        },
+        "content-version": "vor",
+        "delay-in-days": 88,
+        "URL": "https://creativecommons.org/licenses/by-nc-nd/4.0"
+      }
+    ],
+    "URL": "https://doi.org/10.1038/s41597-026-07505-8"
+  },
+  {
+    "DOI": "10.3390/biom15060896",
+    "title": [
+      "Genome-Wide Identification of DNA Methyltransferases (Dnmts) in Fish and Its Potential Roles During Sex Change in Blackhead Seabream"
+    ],
+    "author": [
+      {
+        "given": "Sixin",
+        "family": "Guo",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "College of Life Sciences and Oceanography, Shenzhen University, Shenzhen 518057, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0009-0007-0229-4216",
+        "authenticated-orcid": false,
+        "given": "Binwei",
+        "family": "Duan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "College of Life Sciences and Oceanography, Shenzhen University, Shenzhen 518057, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0009-0008-4673-0590",
+        "authenticated-orcid": false,
+        "given": "Jianchao",
+        "family": "Chen",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "College of Life Sciences and Oceanography, Shenzhen University, Shenzhen 518057, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Mingyang",
+        "family": "Cui",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "College of Life Sciences and Oceanography, Shenzhen University, Shenzhen 518057, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Canbei",
+        "family": "You",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "College of Life Sciences and Oceanography, Shenzhen University, Shenzhen 518057, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Hanyin",
+        "family": "Wei",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "College of Life Sciences and Oceanography, Shenzhen University, Shenzhen 518057, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xiazi",
+        "family": "Huang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "College of Life Sciences and Oceanography, Shenzhen University, Shenzhen 518057, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Li",
+        "family": "Deng",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "College of Life Sciences and Oceanography, Shenzhen University, Shenzhen 518057, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kai",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "College of Life Sciences and Oceanography, Shenzhen University, Shenzhen 518057, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "container-title": [
+      "Biomolecules"
+    ],
+    "volume": "15",
+    "issue": "6",
+    "article-number": null,
+    "published": {
+      "date-parts": [
+        [
+          2025,
+          6,
+          18
+        ]
+      ]
+    },
+    "published-print": null,
+    "published-online": {
+      "date-parts": [
+        [
+          2025,
+          6,
+          18
+        ]
+      ]
+    },
+    "license": [
+      {
+        "start": {
+          "date-parts": [
+            [
+              2025,
+              6,
+              18
+            ]
+          ],
+          "date-time": "2025-06-18T00:00:00Z",
+          "timestamp": 1750204800000
+        },
+        "content-version": "vor",
+        "delay-in-days": 0,
+        "URL": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ],
+    "URL": "https://doi.org/10.3390/biom15060896"
+  }
+]
