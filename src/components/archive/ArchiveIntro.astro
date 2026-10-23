@@ -1,0 +1,45 @@
+---
+import type { Locale } from "../../lib/routes";
+interface Props {
+  locale: Locale;
+}
+const en = Astro.props.locale === "en";
+---
+
+<div class="archive-intro" data-archive-intro>
+  <span class="intro-corner">BA / RESEARCH & ENGINEERING</span>
+  <div class="intro-identity">
+    <svg class="intro-mark" viewBox="0 0 120 120" aria-hidden="true">
+      <circle class="intro-orbit" cx="60" cy="60" r="54" />
+      <path
+        class="intro-brackets"
+        d="M29 41V29H41 M79 29H91V41 M91 79V91H79 M41 91H29V79"
+      />
+      <path
+        class="intro-logo"
+        d="M43 42H55V78H43Z M62 42H78V56H62Z M62 63H78V78H62Z"
+      />
+    </svg>
+    <p class="intro-eyebrow">
+      {en ? "A SPACE FOR DISCOVERY" : "探索 · 研究 · 构建"}
+    </p>
+    <p class="intro-title">
+      BIOINFORMATICS
+      <br />
+      <strong>ARCHIVE</strong>
+    </p>
+    <div class="intro-rule" aria-hidden="true">
+      <i></i>
+    </div>
+    <p class="intro-status" role="status">
+      {en ? "Preparing the archive" : "正在开启档案"}
+      <span aria-hidden="true"> …</span>
+    </p>
+  </div>
+  <div class="intro-footer">
+    <span>{en ? "ACADEMIC / TECHNICAL" : "学术研究 / 技术工程"}</span>
+    <button type="button" data-intro-simple>
+      {en ? "Simple mode" : "简洁模式"} ↗
+    </button>
+  </div>
+</div>

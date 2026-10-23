@@ -1,5 +1,27 @@
 // Injected only by scripts/preview-qa.mjs, before the real production bundle.
 const mode = new URLSearchParams(location.search).get("qa");
+// Record the real inline startup boundary, including the first rendered frame.
+const introTimeline = [];
+const introStart = performance.now();
+const introObserver = new MutationObserver(() => {
+  const state = document.documentElement.dataset.archiveIntro ?? "complete";
+  if (introTimeline.at(-1)?.state === state) return;
+  const root = document.querySelector("[data-archive-terminal]");
+  introTimeline.push({
+    state,
+    ms: Math.round(performance.now() - introStart),
+    mode: root?.dataset.mode ?? null,
+    frames: Number(root?.dataset.frames ?? 0),
+    contentVisibility: document.querySelector(".site-wrap")
+      ? getComputedStyle(document.querySelector(".site-wrap")).visibility
+      : "not parsed",
+  });
+  if (state === "complete") introObserver.disconnect();
+});
+introObserver.observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ["data-archive-intro"],
+});
 const originalContext = HTMLCanvasElement.prototype.getContext;
 const contexts = new Set();
 HTMLCanvasElement.prototype.getContext = function (kind, ...args) {
@@ -57,7 +79,96 @@ window.addEventListener("DOMContentLoaded", () => {
   document.body.append(box);
   const output = box.querySelector("#qa-output");
   const root = document.querySelector("[data-archive-terminal]");
+  const hoverCheck = document.createElement("button");
+  hoverCheck.textContent = "Check folder hover";
+  box.insertBefore(hoverCheck, output);
+  hoverCheck.addEventListener("click", async () => {
+    hoverCheck.disabled = true;
+    const records = [];
+    let phase = "startup";
+    try {
+      await until(
+        () =>
+          root?.dataset.mode === "3d" &&
+          !document.documentElement.dataset.archiveIntro,
+      );
+      if (root.dataset.level !== "HOME")
+        throw new Error("Return to folders first");
+      const canvas = root.querySelector("canvas");
+      const rect = canvas.getBoundingClientRect();
+      const move = (x, y) =>
+        canvas.dispatchEvent(
+          new PointerEvent("pointermove", {
+            clientX: rect.left + rect.width * x,
+            clientY: rect.top + rect.height * y,
+            pointerType: "mouse",
+            bubbles: true,
+          }),
+        );
+      const leave = () =>
+        canvas.dispatchEvent(
+          new PointerEvent("pointerleave", { pointerType: "mouse" }),
+        );
+      const settle = async () => {
+        await delay(100);
+        await until(() => root.dataset.moving === "false", 10000);
+      };
+      leave();
+      phase = "initial settling";
+      await settle();
+      for (const [label, x] of [
+        ["selected", 0.35],
+        ["unselected", 0.65],
+      ]) {
+        const selected = root.dataset.selected;
+        const before = Number(root.dataset.frames);
+        phase = label + " hover";
+        move(x, 0.48);
+        await settle();
+        const frames = Number(root.dataset.frames) - before;
+        if (canvas.style.cursor !== "pointer" || frames < 5)
+          throw new Error(label + " did not animate");
+        if (root.dataset.selected !== selected)
+          throw new Error("Hover changed selection");
+        const exitBefore = Number(root.dataset.frames);
+        phase = label + " leave";
+        leave();
+        await settle();
+        const exitFrames = Number(root.dataset.frames) - exitBefore;
+        if (exitFrames < 5) throw new Error(label + " did not return");
+        const stopped = root.dataset.frames;
+        await delay(250);
+        if (root.dataset.frames !== stopped)
+          throw new Error("Idle rendering did not stop");
+        records.push({
+          label,
+          frames,
+          exitFrames,
+          selectionPreserved: true,
+          idleStopped: true,
+        });
+      }
+      output.textContent = JSON.stringify({ pass: true, records }, null, 2);
+    } catch (error) {
+      output.textContent = JSON.stringify(
+        {
+          error: String(error),
+          phase,
+          hidden: document.hidden,
+          frames: root?.dataset.frames,
+          moving: root?.dataset.moving,
+          paused: root?.dataset.paused,
+          records,
+        },
+        null,
+        2,
+      );
+    } finally {
+      hoverCheck.disabled = false;
+    }
+  });
   const snapshot = () => ({
+    introTimeline,
     mode: root?.dataset.mode,
     level: root?.dataset.level,
     folder: root?.dataset.folder,

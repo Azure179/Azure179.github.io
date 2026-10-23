@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { createDisposalScope } from "./resources";
-import { createCassetteKit } from "./CassetteKit";
-import { spring, advance } from "./motion";
+import { createDisposalScope } from "./resources.ts";
+import { createCassetteKit } from "./CassetteKit.ts";
+import { spring, advance } from "./motion.ts";
 import type { SceneItem, SceneNavigation, ScenePose } from "./types";
 
 /** The same cassette enclosure, assembled into two collection folios. */
@@ -24,6 +24,20 @@ export function createFolderField(
       const folio = new THREE.Group();
       const hero = kit.create(item);
       folio.add(hero.group);
+      const indicatorMaterial = new THREE.MeshBasicMaterial({
+        color: 0xb78a48,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+      });
+      resources.defer(() => indicatorMaterial.dispose());
+      const indicator = new THREE.Mesh(
+        kit.parts[1]!.geometry,
+        indicatorMaterial,
+      );
+      indicator.position.set(1.5, 1.85, 0.24);
+      indicator.scale.set(0.68, 0.035, 0.035);
+      folio.add(indicator);
       // Recessed stacked leaves reuse the enclosure, not a second material system.
       const leaves = [0, 1].map((n) => {
         const leaf = new THREE.Mesh(
@@ -43,6 +57,9 @@ export function createFolderField(
         folio,
         hero,
         leaves,
+        indicatorMaterial,
+        hover: spring(0),
+        selection: spring(i === 0 ? 1 : 0),
         lift: spring(0),
         open: spring(0),
         base: (i - (items.length - 1) / 2) * 5.9,
@@ -100,9 +117,22 @@ export function createFolderField(
         const t = opening.value;
         for (const [i, f] of files.entries()) {
           moving =
+            advance(f.selection, i === index ? 1 : 0, dt, reduced, 10) ||
+            moving;
+          moving =
+            advance(
+              f.hover,
+              hovered === i && !expanded ? 1 : 0,
+              dt,
+              reduced,
+              12,
+            ) || moving;
+          const selected = f.selection.value;
+          const hover = f.hover.value;
+          moving =
             advance(
               f.lift,
-              i === index ? 0.32 : hovered === i ? 0.15 : 0,
+              selected * 0.32 + hover * (selected > 0.5 ? 0.12 : 0.15),
               dt,
               reduced,
               10,
@@ -114,14 +144,15 @@ export function createFolderField(
           f.folio.position.set(
             f.base * (1 - o * 0.82),
             -0.1 + f.lift.value + o * 0.9,
-            -i * 0.7 + o * 1.2,
+            -i * 0.7 + o * 1.2 + hover * selected * 0.14,
           );
           f.folio.rotation.set(
-            -0.28 + o * 0.28,
+            -0.28 + o * 0.28 - hover * selected * 0.055,
             -0.12 * (i ? -1 : 1),
-            -0.035 * (i ? -1 : 1),
+            -0.035 * (i ? -1 : 1) + hover * selected * 0.018,
           );
-          f.hero.cover.position.z = o * 0.55;
+          f.hero.cover.position.z = o * 0.55 + hover * selected * 0.065;
+          f.indicatorMaterial.opacity = selected * (0.68 + hover * 0.32);
           f.leaves.forEach((leaf, n) => {
             leaf.position.x = 0.045 * (n + 1) - o * 0.2 * (n + 1);
           });

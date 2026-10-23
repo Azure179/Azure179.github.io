@@ -50,6 +50,12 @@ export function mountArchive(root: HTMLElement) {
   let transition: ReturnType<typeof setTimeout> | undefined;
   let busy = false;
   let sceneNavigation: SceneNavigation | undefined;
+  let introReady = false;
+  function ready(mode: "3d" | "light") {
+    if (introReady && mode === "3d") return;
+    introReady = true;
+    document.dispatchEvent(new CustomEvent("archive:ready", { detail: mode }));
+  }
   const preferenceKey = "bioarchive-display";
   function read() {
     try {
@@ -334,6 +340,7 @@ export function mountArchive(root: HTMLElement) {
     enable.setAttribute("aria-pressed", "false");
     light.setAttribute("aria-pressed", "true");
     status.textContent = message;
+    ready("light");
   }
   function pause() {
     const value = !inView || document.hidden || !pageActive || state.contact;
@@ -395,6 +402,7 @@ export function mountArchive(root: HTMLElement) {
         },
         onFailure: fail,
         onStats: (stats) => {
+          if (stats.frames > 0) ready("3d");
           Object.entries(stats).forEach(([key, value]) => {
             root.dataset[key] = String(value);
           });
@@ -549,6 +557,15 @@ export function mountArchive(root: HTMLElement) {
     },
     { signal },
   );
+  document.addEventListener(
+    "archive:intro-fallback",
+    () => {
+      wants3D = false;
+      cancelTransition();
+      deactivate();
+    },
+    { signal },
+  );
   reduced.addEventListener("change", () => scene?.reduce(reduced.matches), {
     signal,
   });
@@ -598,12 +615,15 @@ export function mountArchive(root: HTMLElement) {
         const connection = (
           navigator as Navigator & { connection?: { saveData?: boolean } }
         ).connection;
-        wants3D = autoEnable({
-          compact: compact.matches,
-          reduced: reduced.matches,
-          saveData: connection?.saveData ?? false,
-          preference: read(),
-        });
+        wants3D =
+          !document.documentElement.dataset.archiveIntroFallback &&
+          autoEnable({
+            compact: compact.matches,
+            reduced: reduced.matches,
+            saveData: connection?.saveData ?? false,
+            preference: read(),
+          });
+        if (!wants3D) ready("light");
       }
       if (!inView && !scene) {
         cancelPending();

@@ -2,6 +2,8 @@
 import Header from "../components/site/Header.astro";
 import Footer from "../components/site/Footer.astro";
 import FigureLightbox from "../components/portfolio/FigureLightbox.astro";
+import ArchiveIntroHead from "../components/archive/ArchiveIntroHead.astro";
+import ArchiveIntro from "../components/archive/ArchiveIntro.astro";
 import {
   pagePath,
   oppositeLocale,
@@ -46,6 +48,7 @@ const english = locale === "en" ? canonical : alternate;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {page === "home" && <ArchiveIntroHead />}
     <meta name="theme-color" content="#f4f3ef" />
     <title>{title} — BIOINFORMATICS ARCHIVE</title>
     <meta name="description" content={description} />
@@ -75,6 +78,7 @@ const english = locale === "en" ? canonical : alternate;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
+    {page === "home" && <ArchiveIntro locale={locale} />}
     <a class="skip-link" href="#main-content">
       {ui(locale).skip}
     </a>

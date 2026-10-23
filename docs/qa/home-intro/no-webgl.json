@@ -1,0 +1,41 @@
+{
+  "introTimeline": [
+    {
+      "state": "loading",
+      "ms": 2,
+      "mode": null,
+      "frames": 0,
+      "contentVisibility": "not parsed"
+    },
+    {
+      "state": "revealing",
+      "ms": 4060,
+      "mode": "light",
+      "frames": 0,
+      "contentVisibility": "visible"
+    },
+    {
+      "state": "complete",
+      "ms": 4661,
+      "mode": "light",
+      "frames": 0,
+      "contentVisibility": "visible"
+    }
+  ],
+  "mode": "light",
+  "level": "HOME",
+  "folder": "academic",
+  "project": "black-porgy-sex-reversal",
+  "section": "overview",
+  "canvases": 0,
+  "activeContexts": 0,
+  "geometries": "0",
+  "textures": "0",
+  "frames": "0",
+  "moving": "false",
+  "paused": "true",
+  "width": 1912,
+  "scrollWidth": 1897,
+  "errors": [],
+  "engineRequests": 1
+}

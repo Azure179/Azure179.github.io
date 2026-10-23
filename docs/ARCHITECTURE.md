@@ -1,6 +1,14 @@
 # BIOINFORMATICS ARCHIVE — 技术架构
 
-状态：Phase 3.1 已在 Phase 3 内容之上接入分层档案，2026-10-22 完成后续视觉与阅读布局优化。发布仍未执行。
+状态：Phase 3.1 分层档案与 Phase 3.2 内容已部署；首次线上提交为 `761ca7c`。2026-10-24 增加首页首屏门控与选中文件夹反馈。
+
+## 首页首屏门控
+
+`BaseLayout` 仅在 page=home 时输出 `ArchiveIntroHead` 的内联关键 CSS 与无依赖 `intro.js`，并在 `.site-wrap` 之外输出 `ArchiveIntro`。在 HTML 解析阶段设置 loading，避免等待首页 JS 才隐藏静态备用布局。隐藏采用 visibility / opacity，保持布局尺寸，让 IntersectionObserver 与 3D 初始化继续工作。
+
+`bootstrap.ts` 在渲染器第一次成功上报 frames 后发出 `archive:ready(3d)`；2.4 秒最小时长满足后进入 revealing，0.6 秒后清除遮罩、定时器和监听器。deactivate 发出 ready(light)，失败立即退出等待。8.5 秒总看门狗或主动简洁模式触发 `archive:intro-fallback`，取消未完成导入；文档标记同时防止迟到的 bootstrap 自动进入 3D。用户仍可用原切换器主动重试。
+
+无需增加框架、Three.js 资源或外部请求。减少动态效果、省流量、小屏和简洁模式直接进入内容；无 JS 或内联脚本被阻止时遮罩默认隐藏，HTML 链接仍可用。pagehide 清理门控，不在 bfcache 恢复时重复开屏。测试见 `tests/intro.test.mjs` 与 `docs/HOME_INTRO_REPORT.md`。
 
 ## 2026-10-22 当前实现（优先于下方历史记录）
 

@@ -1,0 +1,7 @@
+{
+  "status": "inconclusive",
+  "check": "GPU hover and return settle within 10 seconds",
+  "observed": "The browser probe timed out at selected hover, with 39 frames, moving=true and paused=false. Visual hover displacement was observed afterwards.",
+  "alternative": "tests/folder-feedback.test.mjs passed against the actual Three.js folder geometries and state updates, including raycasting, selected/unselected feedback, return, interrupted selection, reduced motion and resource disposal.",
+  "limitation": "Smoothness and wall-clock convergence still need a foreground hardware-browser visual review. This browser timing probe is not counted as passed."
+}

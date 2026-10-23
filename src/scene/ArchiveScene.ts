@@ -105,6 +105,7 @@ function buildScene(
     width = 1,
     height = 1;
   let pointer: { x: number; y: number } | null = null;
+  let pointerPosition: { x: number; y: number } | null = null;
   let down: { x: number; y: number; id: number } | null = null;
   let hovered: number | null = null;
   function configure(items: SceneItem[], layout: "folders" | "matrix") {
@@ -218,6 +219,7 @@ function buildScene(
     (event) => {
       if (event.pointerType !== "mouse") return;
       pointer = { x: event.clientX, y: event.clientY };
+      pointerPosition = pointer;
       loop.wake();
     },
     { signal },
@@ -226,6 +228,7 @@ function buildScene(
     "pointerleave",
     () => {
       pointer = null;
+      pointerPosition = null;
       hovered = null;
       options.onHover(null);
       field?.clearHover();
@@ -303,7 +306,7 @@ function buildScene(
     select(index, open = false, navigation) {
       if (index !== null) field?.select(index, navigation);
       expanded = open;
-      pointer = null;
+      pointer = kind === "folders" ? pointerPosition : null;
       field?.clearHover();
       options.onHover(null);
       loop.wake();
