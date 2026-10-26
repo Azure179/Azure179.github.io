@@ -249,13 +249,15 @@ const items = Array.from({ length: 6 }, (_, column) =>
   })),
 ).flat();
 test("narrow callout labels remain separate without changing their projected endpoints", () => {
-  for (const width of [320, 390])
+  for (const width of [320, 390, 650])
     for (const height of [568, 844]) {
-      const a = placeOverviewLabel(0, width, height, 175, 149);
-      const b = placeOverviewLabel(1, width, height, 175, 149);
-      assert.ok(a.x >= 20 && b.x + 175 <= width - 20);
-      assert.ok(a.y + 149 + 24 <= b.y);
-      assert.ok(b.y + 149 <= height - 45);
+      const labelWidth = (width - 60) / 2;
+      const a = placeOverviewLabel(0, width, height, labelWidth, 170);
+      const b = placeOverviewLabel(1, width, height, labelWidth, 170);
+      assert.ok(a.x >= 20 && b.x + labelWidth <= width - 20);
+      assert.ok(a.x + labelWidth + 20 <= b.x);
+      assert.equal(a.y, b.y);
+      assert.ok(a.y >= 166 && a.y + 170 <= height - 80);
     }
 });
 function withField(run) {
@@ -281,6 +283,42 @@ function withField(run) {
     else globalThis.document = previous;
   }
 }
+test("mobile matrix centers the raised archive above the copy after either collection entry", () => {
+  for (const [width, height] of [
+    [320, 568],
+    [390, 844],
+    [430, 932],
+  ]) {
+    withField((field) => {
+      field.overview(false);
+      for (const selected of [12, 20, 16]) {
+        field.select(selected);
+        const target = field.update(1 / 60, true, false, width, height);
+        const camera = new THREE.PerspectiveCamera(
+          target.fov,
+          width / height,
+          0.5,
+          500,
+        );
+        camera.position
+          .copy(target.aim)
+          .addScaledVector(target.direction, target.distance);
+        camera.lookAt(target.aim);
+        camera.updateMatrixWorld();
+        const projected = field.snapshot().position.project(camera);
+        assert.ok(
+          Math.abs(projected.x) < 0.01,
+          "cassette stays horizontally centered",
+        );
+        const y = (1 - projected.y) / 2;
+        assert.ok(
+          Math.abs(y - Math.max(196 / height, 0.32)) < 0.01,
+          "cassette stays in upper viewing area",
+        );
+      }
+    });
+  }
+});
 test("micro terrain is shallow and continuous, including both category anchors", () => {
   const anchors = { x: 0, y: 0, z: 20.8, w: 0 };
   for (let x = -40; x <= 60; x += 0.5)

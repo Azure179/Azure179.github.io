@@ -9,6 +9,7 @@ import "../../styles/portfolio.css";
 import "../../styles/reading-layout.css";
 import "../../styles/navigation-layout.css";
 import "../../styles/overview.css";
+import "../../styles/mobile-archive.css";
 interface Props {
   locale: Locale;
   portfolios: Portfolio[];
@@ -125,9 +126,16 @@ const en = locale === "en";
       </div>
     ))}
     <p class="overview-hint">
-      {en
-        ? "Select a collection · Click again or press Enter to explore"
-        : "选择一个档案集 · 再次点击或按 Enter 进入"}
+      <span class="overview-keyboard-hint">
+        {en
+          ? "Select a collection · Click again or press Enter to explore"
+          : "选择一个档案集 · 再次点击或按 Enter 进入"}
+      </span>
+      <span class="overview-touch-hint">
+        {en
+          ? "Tap a collection to select · Tap again to explore"
+          : "轻触选择档案集 · 再次轻触进入"}
+      </span>
     </p>
   </nav>
   <div class="terminal-workspace">
@@ -238,7 +246,17 @@ const en = locale === "en";
         <p class="eyebrow" data-viewer-project></p>
       </div>
     </header>
+    <button
+      class="reader-navigation-toggle"
+      data-reader-navigation-toggle
+      aria-expanded="false"
+      aria-controls="reader-navigation"
+    >
+      {en ? "Projects & sections" : "项目与部分导航"}
+      <span aria-hidden="true">＋</span>
+    </button>
     <nav
+      id="reader-navigation"
       class="reader-navigation"
       aria-label={en ? "Document navigation" : "阅读导航"}
     >

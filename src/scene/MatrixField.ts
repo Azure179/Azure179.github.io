@@ -492,6 +492,16 @@ function buildMatrixField(
       const right = new THREE.Vector3()
         .crossVectors(new THREE.Vector3(0, 1, 0), direction)
         .normalize();
+      if (portrait && width <= 767) {
+        // Keep the raised cassette centered in the free space above mobile copy.
+        // Use the settled matrix origin, not its animated position, so navigation
+        // cannot introduce another camera chase or disturb overview recentering.
+        const screenUp = new THREE.Vector3().crossVectors(direction, right);
+        const centerY = Math.max(196 / height, 0.32);
+        aim
+          .set(0, -0.18, -2.17)
+          .addScaledVector(screenUp, -viewSpan * (0.5 - centerY));
+      }
       detailAim.addScaledVector(
         right,
         portrait ? 0 : viewSpan * aspect * 0.265,

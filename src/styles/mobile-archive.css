@@ -1,0 +1,225 @@
+/* Narrow-screen presentation only; scene poses and desktop geometry stay intact. */
+.overview-touch-hint,
+.reader-navigation-toggle {
+  display: none;
+}
+@media (max-width: 767px) {
+  :is(.archive-3d, .archive-immersive) .site-header {
+    min-height: 72px;
+    left: 20px;
+    right: 20px;
+    gap: 10px;
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  :is(.archive-3d, .archive-immersive) .header-tools {
+    gap: 6px;
+  }
+  .archive-terminal[data-mode="3d"][data-view] .terminal-topline,
+  .archive-terminal[data-mode="3d"][data-view] .archive-back {
+    top: calc(72px + env(safe-area-inset-top, 0px));
+  }
+  .archive-terminal[data-mode="3d"][data-view] {
+    height: 100dvh;
+  }
+  /* Flow layout prevents long project titles colliding with the controls. */
+  .archive-terminal[data-mode="3d"][data-view="PORTFOLIO_MATRIX"] {
+    display: grid;
+    grid-template-rows: 128px minmax(64px, 1fr) auto auto;
+    padding: env(safe-area-inset-top, 0px) 20px
+      max(16px, env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
+  .archive-terminal[data-mode="3d"][data-view="PORTFOLIO_MATRIX"]
+    .terminal-workspace {
+    display: contents;
+  }
+  .archive-terminal[data-mode="3d"][data-view="PORTFOLIO_MATRIX"]::after {
+    background: linear-gradient(
+      180deg,
+      #eee9dfb8,
+      transparent 26%,
+      #eee9df70 48%,
+      #eee9dff5 85%
+    );
+  }
+  .archive-terminal[data-mode="3d"][data-view="PORTFOLIO_MATRIX"]
+    .archive-inspector {
+    position: relative;
+    inset: auto;
+    grid-row: 3;
+    max-width: none;
+    margin: 0 0 16px;
+    text-shadow: 0 1px 12px #f7efe0;
+  }
+  .archive-terminal[data-mode="3d"][data-view="PORTFOLIO_MATRIX"]
+    .archive-inspector
+    h2 {
+    font-size: clamp(20px, 5.5vw, 26px);
+    line-height: 1.3;
+    margin: 8px 0 10px;
+    text-wrap: pretty;
+  }
+  .archive-terminal[data-mode="3d"][data-view="PORTFOLIO_MATRIX"]
+    .archive-inspector
+    .eyebrow {
+    font-size: 10px;
+    margin: 0;
+  }
+  .archive-terminal[data-mode="3d"][data-view="PORTFOLIO_MATRIX"]
+    .archive-inspector
+    [data-description] {
+    font-size: 12px;
+  }
+  .archive-terminal[data-mode="3d"][data-view="PORTFOLIO_MATRIX"]
+    button.archive-open {
+    min-height: 44px;
+    margin-top: 4px;
+    padding-block: 8px;
+    font-size: 12px;
+  }
+  .archive-terminal[data-mode="3d"][data-view="PORTFOLIO_MATRIX"]
+    .archive-navigator {
+    position: relative;
+    inset: auto;
+    grid-row: 4;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .archive-terminal[data-mode="3d"][data-view] .section-navigation {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0 8px;
+    border-top: 1px solid #91846e55;
+    padding-top: 4px;
+  }
+  .archive-terminal[data-mode="3d"][data-view]
+    .section-navigation
+    .navigation-pair {
+    grid-column: 1 / -1;
+  }
+  .archive-terminal[data-mode="3d"][data-view]
+    .archive-navigator
+    .section-controls {
+    position: static;
+    gap: 2px;
+    margin: 0;
+  }
+  .archive-terminal[data-mode="3d"][data-view] .project-navigation {
+    border-top: 1px solid #91846e55;
+    padding-top: 4px;
+  }
+  .archive-terminal[data-mode="3d"][data-view] .navigation-heading {
+    min-height: 44px;
+    align-items: center;
+    font-size: 11px;
+  }
+  .archive-terminal[data-mode="3d"][data-view] .navigation-pair button {
+    min-height: 64px;
+    padding: 6px 0;
+  }
+  .archive-terminal[data-mode="3d"][data-view] .section-heading {
+    font-size: 10px;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+  .archive-terminal[data-mode="3d"][data-view] .navigation-pair button small {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    line-height: 1.45;
+    margin-top: 4px;
+  }
+  .archive-terminal[data-mode="3d"][data-view] .collection-counts {
+    font-size: 10px;
+    margin: 0 0 2px;
+  }
+  .archive-terminal[data-mode="3d"][data-view] .project-directory summary {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .archive-terminal[data-mode="3d"][data-view]
+    .archive-navigator
+    .archive-selectors {
+    max-height: min(50dvh, 360px);
+    overflow-y: auto;
+  }
+  .archive-terminal[data-mode="3d"][data-view="DOCUMENT_VIEWER"]
+    .document-viewer {
+    top: max(148px, 25dvh);
+    padding: 20px 20px max(24px, env(safe-area-inset-bottom, 0px));
+    scrollbar-gutter: auto;
+  }
+  .archive-terminal[data-mode="3d"][data-view="DOCUMENT_VIEWER"]
+    .document-viewer
+    h2 {
+    font-size: 22px;
+    line-height: 1.35;
+  }
+  .archive-terminal[data-mode="3d"][data-view="DOCUMENT_VIEWER"]
+    .reader-navigation {
+    gap: 4px 12px;
+  }
+  .archive-terminal[data-mode="3d"][data-view="DOCUMENT_VIEWER"]:not(
+      [data-reader-navigation="expanded"]
+    )
+    .reader-navigation {
+    display: none;
+  }
+  .reader-navigation-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 0;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: #705432;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #91846e55;
+  }
+  .reader-navigation-toggle[aria-expanded="true"] span {
+    transform: rotate(45deg);
+  }
+  .archive-terminal[data-mode="3d"][data-view="DOCUMENT_VIEWER"]
+    .document-viewer
+    > header {
+    padding-bottom: 8px;
+  }
+}
+@media (max-width: 650px) {
+  .overview-label {
+    width: calc((100vw - 60px) / 2);
+  }
+  .overview-label strong {
+    font-size: clamp(19px, 5.3vw, 25px);
+    overflow-wrap: normal;
+  }
+  .overview-label .overview-enter {
+    letter-spacing: 0;
+    line-height: 1.5;
+  }
+  .overview-purpose {
+    top: 132px;
+    font-size: 11px;
+    max-width: calc(100% - 40px);
+  }
+  .overview-label::before {
+    inset: -20px -16px;
+  }
+  .overview-hint {
+    font: 12px/1.6 var(--font-sans);
+    bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  }
+  .overview-keyboard-hint {
+    display: none;
+  }
+  .overview-touch-hint {
+    display: inline;
+  }
+}

@@ -16,15 +16,11 @@ export function placeOverviewLabel(
   titleHeight = 90,
 ) {
   if (width <= 650) {
-    const gap = 24;
-    const total = labelHeight * 2 + gap;
-    const top = Math.min(
-      height - total - 60,
-      Math.max(height > 650 ? 200 : 138, (height - total) / 2),
-    );
+    // Two compact indexes share one baseline above the projected archives.
+    // Reserve the expanded details height so selection never moves the title.
     return {
-      x: (width - labelWidth) / 2,
-      y: top + index * (labelHeight + gap),
+      x: index ? width - labelWidth - 20 : 20,
+      y: Math.max(166, Math.min(height * 0.29, height - labelHeight - 80)),
     };
   }
   if (point) {

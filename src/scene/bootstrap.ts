@@ -583,6 +583,17 @@ export function mountArchive(root: HTMLElement) {
     el.hidden = false;
   });
   get("[data-open]").addEventListener("click", open, { signal });
+  const readerNavigationToggle = get("[data-reader-navigation-toggle]");
+  readerNavigationToggle.addEventListener(
+    "click",
+    () => {
+      const expanded =
+        readerNavigationToggle.getAttribute("aria-expanded") !== "true";
+      readerNavigationToggle.setAttribute("aria-expanded", String(expanded));
+      root.dataset.readerNavigation = expanded ? "expanded" : "collapsed";
+    },
+    { signal },
+  );
   root
     .querySelectorAll<HTMLElement>(
       "[data-overview-select], [data-overview-enter]",
