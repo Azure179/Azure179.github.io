@@ -8,6 +8,7 @@ import "../../styles/matrix.css";
 import "../../styles/portfolio.css";
 import "../../styles/reading-layout.css";
 import "../../styles/navigation-layout.css";
+import "../../styles/overview.css";
 interface Props {
   locale: Locale;
   portfolios: Portfolio[];
@@ -57,6 +58,78 @@ const en = locale === "en";
   <button class="archive-back" data-back hidden>
     {en ? "← Back" : "← 返回"}
   </button>
+  <nav
+    class="overview-index"
+    aria-label={en ? "Archive collections" : "档案分类"}
+  >
+    <p class="overview-purpose">
+      {en
+        ? "Exploring Biology Through Data & Code."
+        : "以数据理解生命，以代码拓展研究的边界。"}
+      <span>
+        {en
+          ? "BIOINFORMATICS · RESEARCH · ENGINEERING"
+          : "生物信息学 · 学术研究 · 技术工程"}
+      </span>
+    </p>
+    <svg data-overview-lines aria-hidden="true">
+      {portfolios.map((_, i) => (
+        <>
+          <path data-overview-path={i} />
+          <circle data-overview-dot={i} r="3" />
+        </>
+      ))}
+    </svg>
+    {portfolios.map((p, i) => (
+      <div class="overview-label" data-overview-label={i}>
+        <button
+          data-overview-select={i}
+          aria-pressed="false"
+          aria-expanded="false"
+          aria-controls={`overview-${p.id}`}
+        >
+          <strong>
+            {en
+              ? i === 0
+                ? "ACADEMIC ARCHIVE"
+                : "TECHNICAL ARCHIVE"
+              : i === 0
+                ? "学术档案"
+                : "技术档案"}
+          </strong>
+          <span class="overview-subtitle">
+            {en
+              ? i === 0
+                ? "Research portfolio"
+                : "Engineering portfolio"
+              : i === 0
+                ? "科研学术集"
+                : "项目作品集"}
+          </span>
+        </button>
+        <div
+          class="overview-details"
+          id={`overview-${p.id}`}
+          data-overview-details
+          hidden
+        >
+          <span class="mono">
+            {en ? "COLLECTION" : "档案集"} {String(i + 1).padStart(2, "0")} /{" "}
+            {String(p.projects.length).padStart(2, "0")}{" "}
+            {en ? "PROJECTS" : "个项目"}
+          </span>
+          <button class="overview-enter" data-overview-enter={i}>
+            {en ? "EXPLORE COLLECTION" : "探索档案集"} →
+          </button>
+        </div>
+      </div>
+    ))}
+    <p class="overview-hint">
+      {en
+        ? "Select a collection · Click again or press Enter to explore"
+        : "选择一个档案集 · 再次点击或按 Enter 进入"}
+    </p>
+  </nav>
   <div class="terminal-workspace">
     <div
       class="archive-stage"
@@ -126,11 +199,11 @@ const en = locale === "en";
       <p class="collection-counts" data-collection-counts></p>
       <div class="navigation-pair">
         <button data-column="-1">
-          <span>{en ? "← Previous project" : "← 上一项目"}</span>
+          <span>{en ? "↓ Next project" : "↓ 下一项目"}</span>
           <small data-target></small>
         </button>
         <button data-column="1">
-          <span>{en ? "Next project →" : "下一项目 →"}</span>
+          <span>{en ? "↑ Previous project" : "↑ 上一项目"}</span>
           <small data-target></small>
         </button>
       </div>
@@ -171,11 +244,11 @@ const en = locale === "en";
     >
       <p class="reader-progress" data-reader-progress></p>
       <button data-column="-1">
-        <span>{en ? "← Previous project" : "← 上一项目"}</span>
+        <span>{en ? "↓ Next project" : "↓ 下一项目"}</span>
         <small data-target></small>
       </button>
       <button data-column="1">
-        <span>{en ? "Next project →" : "下一项目 →"}</span>
+        <span>{en ? "↑ Previous project" : "↑ 上一项目"}</span>
         <small data-target></small>
       </button>
       <button data-row="-1">

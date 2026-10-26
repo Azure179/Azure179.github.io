@@ -13,6 +13,7 @@ function setup({
   saveData = false,
   preference = null,
   storageError = false,
+  search = "",
 } = {}) {
   let now = 0,
     next = 0,
@@ -31,6 +32,8 @@ function setup({
   runInNewContext(source, {
     document,
     window,
+    location: { search },
+    URLSearchParams,
     Event,
     AbortController,
     performance: { now: () => now },
@@ -94,6 +97,21 @@ test("intro masks initial HTML and reveals a ready first frame at 2.4s, finishin
   assert.equal(app.state, undefined);
   assert.equal(app.removed, true);
   assert.equal(app.timers.size, 0);
+});
+
+test("explicit 3D return masks loading despite a saved simple preference, while reduced motion stays direct", () => {
+  const app = setup({
+    preference: "light",
+    search: "?view=3d&collection=technical",
+  });
+  assert.equal(app.state, "loading");
+  app.ready("3d");
+  app.tick(3000);
+  assert.equal(app.state, undefined);
+  assert.equal(
+    setup({ preference: "light", search: "?view=3d", reduced: true }).state,
+    undefined,
+  );
 });
 
 test("slow downloads wait for a rendered frame rather than showing the static placeholder", () => {

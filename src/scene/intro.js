@@ -3,6 +3,7 @@
   const html = document.documentElement;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let preference;
+  const explicit3D = new URLSearchParams(location.search).get("view") === "3d";
   try {
     preference = sessionStorage.getItem("bioarchive-display");
   } catch {
@@ -12,7 +13,7 @@
     reduced.matches ||
     matchMedia("(max-width: 767px), (pointer: coarse)").matches ||
     navigator.connection?.saveData ||
-    preference === "light"
+    (preference === "light" && !explicit3D)
   )
     return;
 

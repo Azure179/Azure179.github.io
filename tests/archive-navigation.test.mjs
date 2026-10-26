@@ -6,6 +6,8 @@ import {
   navigate,
   parseNavigation,
   navigationHash,
+  projectColumns,
+  projectColumn,
 } from "../src/lib/archive-model.ts";
 
 // Unequal dimensions ensure the two axes cannot accidentally share a modulus.
@@ -20,6 +22,55 @@ const data = [4, 2].map((count, folder) => ({
 }));
 const step = (state, action) => navigate(state, action, data);
 const matrix = () => step(initialNavigation(), { type: "enter" });
+
+test("overview keeps history but entering always starts at A1 or T1", () => {
+  let s = step(matrix(), { type: "select", project: 3, section: 2 });
+  s = step(s, { type: "back" });
+  assert.equal(s.overviewSelected, false);
+  s = step(s, { type: "folder", index: 1 });
+  assert.equal(s.overviewSelected, true);
+  s = step(s, { type: "enter" });
+  s = step(s, { type: "select", project: 1, section: 1 });
+  const hash = navigationHash(s, data);
+  s = step(s, { type: "back" });
+  s = step(s, { type: "folder", index: 0 });
+  assert.equal(s.project, 3);
+  assert.equal(activeRow(s, data), 2);
+  s = parseNavigation(hash, data, s);
+  assert.equal(s.project, 1);
+  assert.equal(activeRow(s, data), 1);
+  s = step(s, { type: "back" });
+  s = step(s, { type: "folder", index: 0 });
+  assert.equal(s.project, 3);
+  assert.equal(activeRow(s, data), 2);
+  s = step(s, { type: "enter" });
+  assert.equal(s.project, 0);
+  assert.equal(activeRow(s, data), 0);
+});
+test("visual column order is A4 A3 A2 A1 T2 T1 without changing IDs or source order", () => {
+  const order = projectColumns(data);
+  assert.deepEqual(
+    order.map((c) => [c.folder, c.project]),
+    [
+      [0, 3],
+      [0, 2],
+      [0, 1],
+      [0, 0],
+      [1, 1],
+      [1, 0],
+    ],
+  );
+  assert.equal(projectColumn(initialNavigation(), data), 3);
+  assert.equal(projectColumn({ ...initialNavigation(), folder: 1 }, data), 5);
+  assert.equal(data[0].projects[0].id, "project-0");
+  let s = step(matrix(), { type: "select", project: 3, section: 2 });
+  for (const c of [...order.slice(1), order[0]]) {
+    s = step(s, { type: "column", direction: 1 });
+    assert.equal(s.folder, c.folder);
+    assert.equal(s.project, c.project);
+  }
+  assert.equal(activeRow(s, data), 2);
+});
 test("selection is separate from opening; reader supports project and section navigation", () => {
   let s = step(initialNavigation(), { type: "folder", index: 1 });
   assert.equal(s.level, "HOME");
@@ -27,7 +78,8 @@ test("selection is separate from opening; reader supports project and section na
   assert.equal(s.level, "PORTFOLIO_MATRIX");
   s = step(s, { type: "open" });
   assert.equal(s.level, "DOCUMENT_VIEWER");
-  assert.equal(step(s, { type: "column", direction: 1 }).project, 1);
+  assert.equal(step(s, { type: "column", direction: 1 }).project, 3);
+  assert.equal(step(s, { type: "column", direction: 1 }).folder, 0);
   assert.equal(step(s, { type: "row", direction: 1 }).level, "DOCUMENT_VIEWER");
   assert.equal(activeRow(step(s, { type: "row", direction: 1 }), data), 1);
 });
@@ -35,29 +87,29 @@ test("horizontal columns and vertical rows cycle independently with per-project 
   let s = step(matrix(), { type: "row", direction: -1 });
   assert.equal(activeRow(s, data), 3);
   assert.equal(s.project, 0);
-  s = step(s, { type: "column", direction: 1 });
+  s = step(s, { type: "column", direction: -1 });
   assert.equal(activeRow(s, data), 0);
   s = step(s, { type: "row", direction: -1 });
   assert.equal(activeRow(s, data), 2);
-  s = step(s, { type: "column", direction: -1 });
+  s = step(s, { type: "column", direction: 1 });
   assert.equal(activeRow(s, data), 3);
-  s = step(s, { type: "column", direction: -1 });
+  s = step(s, { type: "column", direction: 1 });
   assert.equal(s.folder, 1);
   assert.equal(s.project, 1);
-  s = step(s, { type: "column", direction: 1 });
+  s = step(s, { type: "column", direction: -1 });
   assert.equal(s.project, 0);
   assert.equal(s.folder, 0);
   assert.equal(activeRow(s, data), 3);
 });
 test("academic and technical form one continuous project ring with independent row memory", () => {
-  let s = step(matrix(), { type: "select", project: 3, section: 2 });
+  let s = step(matrix(), { type: "select", project: 0, section: 2 });
   s = step(s, { type: "column", direction: 1 });
   assert.equal(s.folder, 1);
-  assert.equal(s.project, 0);
+  assert.equal(s.project, 1);
   s = step(s, { type: "row", direction: 1 });
   s = step(s, { type: "column", direction: -1 });
   assert.equal(s.folder, 0);
-  assert.equal(s.project, 3);
+  assert.equal(s.project, 0);
   assert.equal(activeRow(s, data), 2);
   s = step(s, { type: "column", direction: 1 });
   assert.equal(activeRow(s, data), 1);

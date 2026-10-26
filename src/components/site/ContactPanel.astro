@@ -10,15 +10,12 @@ const en = locale === "en";
 
 <details class="contact-menu" data-contact-panel>
   <summary>
-    Contact <span aria-hidden="true">＋</span>
+    {en ? "Contact" : "联系我"} <span aria-hidden="true">＋</span>
   </summary>
   <section aria-label={en ? "Profile and contact" : "个人简介与联系方式"}>
     <p class="eyebrow">PROFILE / CONTACT</p>
     <h2>{profile.displayName ?? "Azure179"}</h2>
     {profile.biography && <p>{profile.biography[locale]}</p>}
-    <a href={pagePath("about", locale)}>
-      {en ? "About this portfolio" : "关于此作品集"} ↗
-    </a>
     {(profile.education || profile.researchInterests) && (
       <>
         <h3>{en ? "Education & Research Interests" : "教育经历与研究兴趣"}</h3>

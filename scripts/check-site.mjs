@@ -52,6 +52,41 @@ for (const file of htmlFiles) {
   const html = await readFile(file, "utf8");
   const name = relative(root, file).replaceAll("\\", "/");
   const isHome = name === "index.html" || name === "zh/index.html";
+  if (name === "about/index.html" || name === "zh/about/index.html") {
+    const target = name.startsWith("zh/") ? "/zh/contact/" : "/contact/";
+    assert.match(
+      html,
+      /http-equiv="refresh"/i,
+      "Retired About URL must redirect",
+    );
+    assert.ok(html.includes(target));
+    assert.ok(!html.includes("ArchiveScene"));
+    continue;
+  }
+  assert.ok(
+    !/href="\/(?:zh\/)?about\/"/.test(html),
+    `Retired About link: ${name}`,
+  );
+  if (/^(?:zh\/)?(?:academic|technical)\/index.html$/.test(name)) {
+    assert.ok(html.includes("data-return-3d"), `Missing 3D return: ${name}`);
+    const href = html.match(/data-return-3d[^>]*href="([^"]+)"/)?.[1];
+    assert.ok(href, `Missing 3D URL: ${name}`);
+    const url = new URL(
+      href.replaceAll("&amp;", "&"),
+      "https://azure179.github.io",
+    );
+    assert.equal(url.searchParams.get("view"), "3d");
+    assert.equal(
+      url.searchParams.get("collection"),
+      name.includes("technical") ? "technical" : "academic",
+    );
+    assert.equal(url.pathname, name.startsWith("zh/") ? "/zh/" : "/");
+  }
+  if (isHome || /^(?:zh\/)?contact\/index.html$/.test(name))
+    assert.ok(
+      html.includes('href="mailto:duanbw.sz@qq.com"'),
+      `Missing public email: ${name}`,
+    );
   const isResearchDetail =
     /(?:^|\/)research\/(?:black-porgy-sex-reversal|fish-t2t-genome|fish-dnmt-family|tilapia-eccdna)\//.test(
       name,
@@ -203,13 +238,7 @@ for (const file of htmlFiles) {
       !/<link[^>]+modulepreload[^>]+ArchiveScene/.test(html),
       "3D loaded eagerly",
     );
-    for (const route of [
-      "academic",
-      "publications",
-      "technical",
-      "about",
-      "contact",
-    ]) {
+    for (const route of ["academic", "publications", "technical", "contact"]) {
       const prefix = name.startsWith("zh/") ? "/zh/" : "/";
       assert.ok(
         html.includes(`href="${prefix}${route}/"`),

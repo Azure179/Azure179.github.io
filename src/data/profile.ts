@@ -19,7 +19,7 @@ export const profile: Profile = {
   displayName: null,
   verified: false,
   biography: null,
-  email: null,
+  email: "duanbw.sz@qq.com",
   cvPath: null,
   professionalResumePath: null,
   education: null,

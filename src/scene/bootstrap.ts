@@ -1,4 +1,5 @@
 import { createWheelNavigation } from "./wheel-navigation";
+import { placeOverviewLabel, overviewLeader } from "./overview-callouts";
 import { autoEnable } from "./state";
 import {
   activeRow,
@@ -38,6 +39,19 @@ export function mountArchive(root: HTMLElement) {
   const events = new AbortController(),
     signal = events.signal;
   let state = parseNavigation(location.hash, portfolios);
+  // Explicit return links work even on compact/reduced-motion devices and when
+  // optional session storage is unavailable. Reduced motion still controls animation.
+  const displayQuery = new URLSearchParams(location.search);
+  const explicit3D = displayQuery.get("view") === "3d";
+  const requestedCollection = portfolios.findIndex(
+    (p) => p.id === displayQuery.get("collection"),
+  );
+  if (explicit3D && state.level === "HOME" && requestedCollection >= 0)
+    state = navigate(
+      state,
+      { type: "folder", index: requestedCollection },
+      portfolios,
+    );
   let scene: ArchiveScene | null = null;
   let layoutKey = "",
     request = 0,
@@ -51,6 +65,7 @@ export function mountArchive(root: HTMLElement) {
   let busy = false;
   let sceneNavigation: SceneNavigation | undefined;
   let introReady = false;
+  let resume3DOnReturn = false;
   function ready(mode: "3d" | "light") {
     if (introReady && mode === "3d") return;
     introReady = true;
@@ -71,6 +86,15 @@ export function mountArchive(root: HTMLElement) {
       /* Optional preference. */
     }
   }
+  function openSimple(replace = false) {
+    resume3DOnReturn = !replace && scene !== null;
+    write("light");
+    cancelTransition();
+    deactivate();
+    const href = portfolios[state.folder]!.href;
+    if (replace) location.replace(href);
+    else location.assign(href);
+  }
   const folder = () => portfolios[state.folder]!;
   const project = () => folder().projects[state.project]!;
   const row = () => activeRow(state, portfolios);
@@ -78,35 +102,40 @@ export function mountArchive(root: HTMLElement) {
   const home = () => state.level === "HOME";
   const columns = projectColumns(portfolios);
   function items(): SceneItem[] {
-    return home()
-      ? portfolios.map((p, column) => ({
-          label: p.label,
-          title: p.title,
-          column,
-          row: 0,
-        }))
-      : columns.flatMap(({ entry: p }, column) =>
-          p.sections.map((s, row) => ({
-            label: p.index + " / " + String(row + 1).padStart(2, "0"),
-            title: p.title,
-            section: s.title,
-            column,
-            row,
-          })),
-        );
+    return columns.flatMap(({ entry: p, folder }, column) =>
+      p.sections.map((s, row) => ({
+        label: p.index + " / " + String(row + 1).padStart(2, "0"),
+        title: p.title,
+        section: s.title,
+        column,
+        row,
+        portfolio: folder,
+      })),
+    );
   }
   function selectedIndex() {
-    return home()
-      ? state.folder
-      : columns
-          .slice(0, projectColumn(state, portfolios))
-          .reduce((sum, p) => sum + p.entry.sections.length, 0) + row();
+    return (
+      columns
+        .slice(0, projectColumn(state, portfolios))
+        .reduce((sum, p) => sum + p.entry.sections.length, 0) + row()
+    );
+  }
+  function anchors() {
+    // Home composition is canonical; project/section memory only applies on entry.
+    return portfolios.map((_, folder) => {
+      const column = columns.findIndex(
+        (c) => c.folder === folder && c.project === 0,
+      );
+      return items().findIndex(
+        (item) => item.column === column && item.row === 0,
+      );
+    });
   }
   function syncScene() {
     const key = home() ? "home" : "matrix";
     if (key !== layoutKey && scene) {
       try {
-        scene.configure(items(), home() ? "folders" : "matrix");
+        scene.configure(items(), home() ? "overview" : "matrix");
       } catch {
         wants3D = false;
         deactivate(root.dataset.failure);
@@ -114,8 +143,9 @@ export function mountArchive(root: HTMLElement) {
       }
       layoutKey = key;
     }
+    scene?.anchors(anchors());
     scene?.select(
-      selectedIndex(),
+      home() ? anchors()[state.folder]! : selectedIndex(),
       state.level === "DOCUMENT_VIEWER",
       sceneNavigation,
     );
@@ -144,10 +174,37 @@ export function mountArchive(root: HTMLElement) {
     root.dataset.project = project().id;
     root.dataset.section = section().id;
     root.dataset.selected = String(selectedIndex());
+    root
+      .querySelectorAll<HTMLButtonElement>("[data-overview-select]")
+      .forEach((button, i) => {
+        const selected = state.overviewSelected && state.folder === i;
+        button.setAttribute(
+          "aria-pressed",
+          String(state.overviewSelected && state.folder === i),
+        );
+        button.closest<HTMLElement>("[data-overview-label]")!.dataset.selected =
+          String(state.overviewSelected && state.folder === i);
+        button.setAttribute("aria-expanded", String(selected));
+        root
+          .querySelectorAll<SVGElement>(
+            `[data-overview-path="${i}"], [data-overview-dot="${i}"]`,
+          )
+          .forEach((element) => {
+            element.dataset.selected = String(selected);
+          });
+        button
+          .closest<HTMLElement>("[data-overview-label]")!
+          .querySelector<HTMLElement>("[data-overview-details]")!.hidden =
+          !selected;
+      });
     const languageLink =
       document.querySelector<HTMLAnchorElement>(".language-link");
     if (languageLink) {
       const url = new URL(languageLink.href);
+      if (explicit3D) {
+        url.searchParams.set("view", "3d");
+        url.searchParams.set("collection", folder().id);
+      }
       url.hash = navigationHash(state, portfolios);
       languageLink.href = url.href;
     }
@@ -171,7 +228,7 @@ export function mountArchive(root: HTMLElement) {
     get("[data-back]").textContent =
       state.level === "DOCUMENT_VIEWER"
         ? words("← Back to projects", "← 返回项目阵列")
-        : words("← Back to folders", "← 返回文件夹");
+        : words("← Back to overview", "← 返回总览");
     get("[data-matrix-controls]").hidden = home();
     const column = projectColumn(state, portfolios);
     const projectProgress = words(
@@ -281,8 +338,20 @@ export function mountArchive(root: HTMLElement) {
   }
   function dispatch(action: NavigationAction) {
     if (busy && action.type !== "back" && action.type !== "contact") return;
+    const returning =
+      action.type === "back" &&
+      state.level === "PORTFOLIO_MATRIX" &&
+      !state.contact;
     if (action.type === "back" || action.type === "contact") cancelTransition();
     commit(action);
+    if (returning && scene && !reduced.matches) {
+      busy = true;
+      root.dataset.busy = "true";
+      root.dataset.transition = "overview-return";
+    }
+    if (action.type === "folder") {
+      scene?.pulse(anchors()[state.folder]!);
+    }
     if (action.type === "back") stage.focus({ preventScroll: true });
   }
   function open() {
@@ -290,23 +359,34 @@ export function mountArchive(root: HTMLElement) {
     const action: NavigationAction = { type: home() ? "enter" : "open" };
     if (!scene || reduced.matches) {
       dispatch(action);
+      if (action.type === "enter") stage.focus({ preventScroll: true });
       return;
     }
     busy = true;
     root.dataset.busy = "true";
-    root.dataset.transition = home() ? "enter" : "extract";
-    scene.select(selectedIndex(), true);
-    transition = setTimeout(
-      () => {
-        cancelTransition();
-        commit(action);
-      },
-      home() ? 720 : 900,
-    );
+    const entering = home();
+    root.dataset.transition = entering ? "overview-lift" : "extract";
+    get("[data-back]").hidden = false;
+    scene.select(entering ? anchors()[state.folder]! : selectedIndex(), true);
+    // Travel begins after the actual A1/T1 representative has visibly lifted.
+    if (entering) return;
+    transition = setTimeout(() => {
+      cancelTransition();
+      commit(action);
+    }, 900);
+  }
+  function choosePortfolio(index: number, confirm = false) {
+    if (busy || !home() || state.contact) return;
+    if (confirm || (state.overviewSelected && state.folder === index)) {
+      dispatch({ type: "folder", index });
+      open();
+    } else {
+      dispatch({ type: "folder", index });
+    }
   }
   function selectScene(index: number) {
     if (busy || state.contact || state.level === "DOCUMENT_VIEWER") return;
-    if (home()) dispatch({ type: "folder", index });
+    if (home()) choosePortfolio(items()[index]!.portfolio!);
     else {
       const item = items()[index];
       const col = item && columns[item.column];
@@ -325,6 +405,7 @@ export function mountArchive(root: HTMLElement) {
     loadTimer = undefined;
   }
   function deactivate(message = root.dataset.fallback!) {
+    cancelTransition();
     cancelPending();
     get("[data-hover]").hidden = true;
     scene?.dispose();
@@ -359,6 +440,7 @@ export function mountArchive(root: HTMLElement) {
       if (ticket !== request || disposed) return;
       wants3D = false;
       deactivate(root.dataset.failure);
+      openSimple(true);
     };
     loadTimer = setTimeout(fail, 8000);
     try {
@@ -375,8 +457,57 @@ export function mountArchive(root: HTMLElement) {
       scene = createArchiveScene({
         host,
         items: items(),
-        kind: home() ? "folders" : "matrix",
+        kind: home() ? "overview" : "matrix",
         reduced: reduced.matches,
+        anchors: anchors(),
+        onAnchors: (points) => {
+          const width = host.clientWidth,
+            height = host.clientHeight;
+          const svg = get<HTMLElement>("[data-overview-lines]");
+          svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+          portfolios.forEach((_, i) => {
+            const label = root.querySelector<HTMLElement>(
+              `[data-overview-label="${i}"]`,
+            )!;
+            const path = svg.querySelector<SVGPathElement>(
+              `[data-overview-path="${i}"]`,
+            )!;
+            const dot = svg.querySelector<SVGCircleElement>(
+              `[data-overview-dot="${i}"]`,
+            )!;
+            // Labels stay readable; the dot follows the canonical A1/T1 archive.
+            const w = label.offsetWidth || 220,
+              h = Math.max(
+                label.offsetHeight,
+                width <= 650 ? 170 : chinese ? 195 : 230,
+              );
+            const point = points[i]!;
+            const titleHeight = label.querySelector<HTMLElement>(
+              "[data-overview-select]",
+            )!.offsetHeight;
+            const { x, y } = placeOverviewLabel(
+              i,
+              width,
+              height,
+              w,
+              h,
+              point,
+              titleHeight,
+            );
+            label.style.transform = `translate(${x}px, ${y}px)`;
+            label.style.visibility = "visible";
+            const end = {
+              x: point.x < x + w / 2 ? x : x + w,
+              y: y + titleHeight,
+            };
+            path.setAttribute("d", overviewLeader(point, end));
+            dot.setAttribute("cx", String(point.x));
+            dot.setAttribute("cy", String(point.y));
+            path.style.visibility = dot.style.visibility = point.visible
+              ? "visible"
+              : "hidden";
+          });
+        },
         onSelect: selectScene,
         onHover: (index, x = 0, y = 0) => {
           const hint = get("[data-hover]");
@@ -397,11 +528,36 @@ export function mountArchive(root: HTMLElement) {
           hint.style.top = `${Math.max(12, Math.min(y + 24, innerHeight - hint.offsetHeight - 12))}px`;
         },
         onOpen: (index) => {
+          if (home()) {
+            choosePortfolio(items()[index]!.portfolio!, true);
+            return;
+          }
           selectScene(index);
           open();
         },
         onFailure: fail,
         onStats: (stats) => {
+          if (
+            root.dataset.transition === "overview-lift" &&
+            home() &&
+            stats.lift >= 0.66
+          ) {
+            root.dataset.transition = "overview-travel";
+            commit({ type: "enter" });
+            stage.focus({ preventScroll: true });
+          }
+          if (
+            root.dataset.transition === "overview-travel" &&
+            stats.overview === 0 &&
+            !stats.cameraMoving
+          )
+            cancelTransition();
+          if (
+            root.dataset.transition === "overview-return" &&
+            stats.overview === 1 &&
+            !stats.cameraMoving
+          )
+            cancelTransition();
           if (stats.frames > 0) ready("3d");
           Object.entries(stats).forEach(([key, value]) => {
             root.dataset[key] = String(value);
@@ -427,6 +583,34 @@ export function mountArchive(root: HTMLElement) {
     el.hidden = false;
   });
   get("[data-open]").addEventListener("click", open, { signal });
+  root
+    .querySelectorAll<HTMLElement>(
+      "[data-overview-select], [data-overview-enter]",
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () =>
+          choosePortfolio(
+            Number(
+              button.dataset.overviewSelect ?? button.dataset.overviewEnter,
+            ),
+            button.hasAttribute("data-overview-enter"),
+          ),
+        { signal },
+      );
+      button.addEventListener(
+        "dblclick",
+        () =>
+          choosePortfolio(
+            Number(
+              button.dataset.overviewSelect ?? button.dataset.overviewEnter,
+            ),
+            true,
+          ),
+        { signal },
+      );
+    });
   get("[data-back]").addEventListener(
     "click",
     () => dispatch({ type: "back" }),
@@ -459,6 +643,21 @@ export function mountArchive(root: HTMLElement) {
       }
       if (target.closest("[data-viewer]")) return;
       if (target.closest("a, input, textarea, select")) return;
+      const overviewButton = target.closest<HTMLElement>(
+        "[data-overview-select], [data-overview-enter]",
+      );
+      if (event.key === "Enter" && overviewButton) {
+        event.preventDefault();
+        if (!event.repeat)
+          choosePortfolio(
+            Number(
+              overviewButton.dataset.overviewSelect ??
+                overviewButton.dataset.overviewEnter,
+            ),
+            true,
+          );
+        return;
+      }
       let action: NavigationAction | undefined;
       if (event.key === "Escape") action = { type: "back" };
       else if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
@@ -550,10 +749,7 @@ export function mountArchive(root: HTMLElement) {
     "click",
     () => {
       wants3D = false;
-      write("light");
-      cancelTransition();
-      deactivate();
-      render();
+      openSimple();
     },
     { signal },
   );
@@ -561,8 +757,7 @@ export function mountArchive(root: HTMLElement) {
     "archive:intro-fallback",
     () => {
       wants3D = false;
-      cancelTransition();
-      deactivate();
+      openSimple(true);
     },
     { signal },
   );
@@ -601,6 +796,10 @@ export function mountArchive(root: HTMLElement) {
     (event) => {
       if (event.persisted) {
         pageActive = true;
+        if (resume3DOnReturn) {
+          wants3D = true;
+          write("3d");
+        }
         render();
         if (wants3D) void activate();
       }
@@ -617,13 +816,19 @@ export function mountArchive(root: HTMLElement) {
         ).connection;
         wants3D =
           !document.documentElement.dataset.archiveIntroFallback &&
-          autoEnable({
-            compact: compact.matches,
-            reduced: reduced.matches,
-            saveData: connection?.saveData ?? false,
-            preference: read(),
-          });
-        if (!wants3D) ready("light");
+          (explicit3D ||
+            autoEnable({
+              compact: compact.matches,
+              reduced: reduced.matches,
+              saveData: connection?.saveData ?? false,
+              preference: read(),
+            }));
+        if (wants3D && explicit3D) write("3d");
+        if (!wants3D) {
+          ready("light");
+          openSimple(true);
+          return;
+        }
       }
       if (!inView && !scene) {
         cancelPending();

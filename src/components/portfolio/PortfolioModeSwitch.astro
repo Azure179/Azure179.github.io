@@ -1,0 +1,72 @@
+---
+import { pagePath, type Locale } from "../../lib/routes";
+interface Props {
+  locale: Locale;
+  kind: "academic" | "technical";
+}
+const { locale, kind } = Astro.props;
+const en = locale === "en";
+---
+
+<div class="portfolio-display-bar">
+  <nav
+    class="portfolio-mode-switch"
+    aria-label={en ? "Display mode" : "显示模式"}
+  >
+    <a
+      data-return-3d
+      href={`${pagePath("home", locale)}?view=3d&collection=${kind}`}
+    >
+      3D
+    </a>
+    <a href={pagePath(kind, locale)} aria-current="page">
+      {en ? "Simple" : "简洁模式"}
+    </a>
+  </nav>
+</div>
+
+<style>
+  .portfolio-display-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px 24px;
+    margin: 24px 0 0;
+  }
+  .portfolio-mode-switch {
+    display: flex;
+    position: relative;
+    border-bottom: 1px solid #8f806752;
+  }
+  .portfolio-mode-switch::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    right: 0;
+    width: 50%;
+    border-bottom: 2px solid #987142;
+    pointer-events: none;
+  }
+  .portfolio-mode-switch a {
+    display: grid;
+    place-items: center;
+    min-width: 78px;
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #6b6254;
+    text-decoration: none;
+  }
+  .portfolio-mode-switch [aria-current] {
+    color: #30261a;
+    font-weight: 600;
+  }
+  .portfolio-display-bar a:hover {
+    color: #805421;
+  }
+  .portfolio-display-bar a:focus-visible {
+    outline: 2px solid #987142;
+    outline-offset: 3px;
+  }
+</style>

@@ -1,15 +1,26 @@
 import * as THREE from "three";
-import { createCassetteKit } from "./CassetteKit";
-import { spring, advance } from "./motion";
-import { createArchiveWaves } from "./archive-waves";
-import { createDisposalScope } from "./resources";
+import { createCassetteKit } from "./CassetteKit.ts";
+import { spring, advance } from "./motion.ts";
+import { createArchiveWaves } from "./archive-waves.ts";
+import { createDisposalScope } from "./resources.ts";
+import { createOverviewBackdrop } from "./OverviewBackdrop.ts";
+import { createOverviewPulse } from "./OverviewPulse.ts";
+import {
+  overviewSpan,
+  overviewBreath,
+  overviewRipple,
+  overviewEase,
+  OVERVIEW_DURATION,
+  OVERVIEW,
+  overviewTerrain,
+} from "./overview.ts";
 import {
   COLUMN_SPACING,
   ROW_SPACING,
   nearestOccurrence,
   shoulder,
   wrap,
-} from "./matrix-layout";
+} from "./matrix-layout.ts";
 import type { SceneItem, SceneNavigation, ScenePose } from "./types";
 
 /** Original cassette geometry. Camera calculation adapted from RhineLabUI
@@ -22,6 +33,7 @@ export function createMatrixField(
   compact: boolean,
   entering = false,
   entryPose?: ScenePose,
+  overview = false,
 ) {
   const resources = createDisposalScope();
   try {
@@ -32,6 +44,7 @@ export function createMatrixField(
       resources,
       entering,
       entryPose,
+      overview,
     );
   } catch (error) {
     resources.dispose();
@@ -45,6 +58,7 @@ function buildMatrixField(
   resources: ReturnType<typeof createDisposalScope>,
   entering: boolean,
   entryPose?: ScenePose,
+  overview = false,
 ) {
   const group = new THREE.Group();
   scene.add(group);
@@ -61,6 +75,19 @@ function buildMatrixField(
     poolRows = compact ? 24 : 36;
   const capacity = poolColumns * poolRows;
   const kit = createCassetteKit(resources);
+  let overviewWanted = overview;
+  let overviewTime = overview ? 1 : 0;
+  let overviewGain = overviewTime;
+  let overviewClock = 0;
+  let homeLaneOffset = 0,
+    homeRowOffset = 0;
+  let anchorIndices: number[] = [];
+  let pulse: { index: number; start: number } | null = null;
+  let backdrop: ReturnType<typeof createOverviewBackdrop> | undefined;
+  const drawPulse = createOverviewPulse(group, resources);
+  const pulsePosition = new THREE.Vector3();
+  const terrainAnchors = new THREE.Vector4();
+  let anchorHeights: number[] = [];
   const parts = kit.instanceParts().map((p, i) => {
     const mesh = new THREE.InstancedMesh(p.geometry, p.material, capacity);
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
@@ -112,12 +139,20 @@ function buildMatrixField(
   let cells: { lane: number; row: number; index: number }[] = [];
   let clicked: { lane: number; row: number; index: number } | null = null;
   let initial = true;
+  // Freeze the matrix-side world reference for the whole overview journey.
+  // World recentering and the camera use the same eased progress, not two springs.
+  let overviewRig: { x: number; z: number } | null = null;
+  let pendingHomeSelection: number | null = null;
   const transform = new THREE.Object3D();
   const waves = createArchiveWaves();
   function select(next: number, navigation?: SceneNavigation) {
     const item = items[next];
     if (!item) return;
-    if (!initial && next !== index) {
+    if (overviewWanted && overviewGain < 1 && !initial) {
+      pendingHomeSelection = next;
+      return;
+    }
+    if (!initial && next !== index && !overviewWanted) {
       returning.push({ lane, row, lift: spring(sl.value) });
       if (returning.length > 8) returning.shift();
       sl.value = 0;
@@ -125,7 +160,10 @@ function buildMatrixField(
     }
     const hit = clicked;
     clicked = null;
-    if (!navigation && hit?.index === next) {
+    if (overviewWanted) {
+      lane = item.column + homeLaneOffset;
+      row = item.row + homeRowOffset;
+    } else if (!navigation && hit?.index === next) {
       lane = hit.lane;
       row = hit.row;
     } else {
@@ -138,20 +176,57 @@ function buildMatrixField(
           ? row + navigation.direction
           : nearestOccurrence(item.row, row, rows[item.column]!);
     }
-    if (!initial && index !== next) waves.select(row, lane);
+    if (!initial && index !== next && !overviewWanted) waves.select(row, lane);
     if (index !== next || initial) drawLabel(next);
     index = next;
+    if (!overviewWanted && overviewGain === 1)
+      overviewRig = { x: lane * COLUMN_SPACING, z: row * ROW_SPACING };
     if (initial) {
-      x = lane * COLUMN_SPACING;
-      z = row * ROW_SPACING;
-      focusLane = lane;
-      focusRow = row;
+      x = overviewWanted ? 0 : lane * COLUMN_SPACING;
+      z = overviewWanted ? 0 : row * ROW_SPACING;
+      focusLane = x / COLUMN_SPACING;
+      focusRow = z / ROW_SPACING;
       sx.value = x;
       sz.value = z;
     }
   }
   select(0);
   return {
+    overview(value: boolean) {
+      if (value !== overviewWanted) {
+        if (overviewGain === 0) overviewRig = { x, z };
+        else if (overviewGain === 1)
+          overviewRig = { x: lane * COLUMN_SPACING, z: row * ROW_SPACING };
+        if (!value) pendingHomeSelection = null;
+      }
+      if (value && !overviewWanted) {
+        homeLaneOffset = 0;
+        homeRowOffset = 0;
+        pulse = null;
+      }
+      overviewWanted = value;
+      clicked = null;
+      hovered = null;
+    },
+    anchors(indices: number[]) {
+      anchorIndices = indices;
+    },
+    pulse(next: number) {
+      pulse = {
+        index: next,
+        start: overviewClock,
+      };
+    },
+    anchorPoints() {
+      return anchorIndices.map((i) => {
+        const item = items[i]!;
+        return new THREE.Vector3(
+          (item.column + homeLaneOffset) * COLUMN_SPACING - x,
+          anchorHeights[anchorIndices.indexOf(i)] ?? -0.82,
+          (item.row + homeRowOffset) * ROW_SPACING - z - 2.17,
+        );
+      });
+    },
     snapshot() {
       return {
         position: active.position.clone(),
@@ -173,7 +248,7 @@ function buildMatrixField(
           ? { lane, row, index }
           : cells[hit.instanceId];
       if (!cell) return null;
-      if (click) clicked = cell;
+      if (click && !overviewWanted) clicked = cell;
       else hovered = cell;
       return cell.index;
     },
@@ -188,10 +263,52 @@ function buildMatrixField(
       height: number,
     ) {
       initial = false;
-      let moving = advance(sx, lane * COLUMN_SPACING, dt, reduced, 7);
-      moving = advance(sz, row * ROW_SPACING, dt, reduced, 8) || moving;
-      moving = advance(sl, expanded ? 4.15 : 0.42, dt, reduced, 8) || moving;
-      moving = advance(sd, expanded ? 1 : 0, dt, reduced, 7) || moving;
+      overviewClock += dt;
+      overviewTime = reduced
+        ? Number(overviewWanted)
+        : THREE.MathUtils.clamp(
+            overviewTime + ((overviewWanted ? 1 : -1) * dt) / OVERVIEW_DURATION,
+            0,
+            1,
+          );
+      overviewGain = overviewEase(overviewTime);
+      const og = overviewGain;
+      const journey = overviewRig !== null;
+      if (og === 1 && pendingHomeSelection !== null) {
+        const next = pendingHomeSelection;
+        pendingHomeSelection = null;
+        select(next);
+      }
+      // Category selection never moves home. Return also restores the world rig,
+      // so fixed lights and the camera see the same region after matrix browsing.
+      let moving = false;
+      if (overviewRig) {
+        sx.value = overviewRig.x * (1 - og);
+        sz.value = overviewRig.z * (1 - og);
+        sx.velocity = sz.velocity = 0;
+      } else {
+        moving = advance(
+          sx,
+          overviewWanted ? 0 : lane * COLUMN_SPACING,
+          dt,
+          reduced,
+          7,
+        );
+        moving =
+          advance(sz, overviewWanted ? 0 : row * ROW_SPACING, dt, reduced, 8) ||
+          moving;
+      }
+      moving =
+        advance(
+          sl,
+          overviewWanted ? (expanded ? 0.75 : 0) : expanded ? 4.15 : 0.42,
+          dt,
+          reduced,
+          8,
+        ) || moving;
+      moving =
+        advance(sd, expanded && !overviewWanted ? 1 : 0, dt, reduced, 7) ||
+        moving;
       moving = advance(arrival, 0, dt, reduced, 8) || moving;
       moving = waves.update(dt, reduced, expanded) || moving;
       for (let i = returning.length - 1; i >= 0; i--) {
@@ -203,11 +320,96 @@ function buildMatrixField(
       z = sz.value;
       lift = sl.value;
       detail = sd.value;
-      focusLane = x / COLUMN_SPACING;
-      focusRow = z / ROW_SPACING;
+      // Recentring the render coordinates is not a project/section selection.
+      // Keep the raised region at the matrix endpoint throughout the journey;
+      // only its gain fades, otherwise it sweeps across every intervening column.
+      focusLane = (overviewRig?.x ?? x) / COLUMN_SPACING;
+      focusRow = (overviewRig?.z ?? z) / ROW_SPACING;
       cells = [];
-      const centerLane = Math.round(x / COLUMN_SPACING),
-        centerRow = Math.round(z / ROW_SPACING);
+      const anchorCenter =
+        homeLaneOffset +
+        (anchorIndices.length
+          ? anchorIndices.reduce((sum, i) => sum + items[i]!.column, 0) /
+            anchorIndices.length
+          : 0);
+      const centerLane = Math.round(
+          THREE.MathUtils.lerp(x / COLUMN_SPACING, anchorCenter, og),
+        ),
+        centerRow = Math.round(
+          THREE.MathUtils.lerp(z / ROW_SPACING, homeRowOffset, og),
+        );
+      if (og > 0 && !backdrop)
+        backdrop = createOverviewBackdrop(group, resources);
+      const anchorA = items[anchorIndices[0] ?? 0]!,
+        anchorB = items[anchorIndices[1] ?? 0]!;
+      terrainAnchors.set(
+        (anchorA.column + homeLaneOffset) * COLUMN_SPACING,
+        (anchorA.row + homeRowOffset) * ROW_SPACING,
+        (anchorB.column + homeLaneOffset) * COLUMN_SPACING,
+        (anchorB.row + homeRowOffset) * ROW_SPACING,
+      );
+      backdrop?.update(
+        og,
+        x,
+        z,
+        centerLane,
+        centerRow,
+        poolColumns,
+        poolRows,
+        width / height,
+        reduced ? 0 : overviewClock,
+        reduced,
+        terrainAnchors,
+      );
+      const homeHeight = (col: number, r: number) => {
+        if (og === 0) return 0;
+        const terrain = overviewTerrain(
+          col * COLUMN_SPACING,
+          r * ROW_SPACING,
+          terrainAnchors,
+        );
+        if (reduced) return terrain;
+        const p = pulse && items[pulse.index];
+        return (
+          terrain +
+          overviewBreath(col * COLUMN_SPACING, r * ROW_SPACING, overviewClock) +
+          (p
+            ? overviewRipple(
+                Math.hypot(
+                  col * COLUMN_SPACING -
+                    (p.column + homeLaneOffset) * COLUMN_SPACING,
+                  r * ROW_SPACING - (p.row + homeRowOffset) * ROW_SPACING,
+                ),
+                overviewClock - pulse!.start,
+              )
+            : 0)
+        );
+      };
+      const pulseItem = pulse && items[pulse.index];
+      if (pulseItem)
+        pulsePosition.set(
+          (pulseItem.column + homeLaneOffset) * COLUMN_SPACING - x,
+          -0.89 +
+            homeHeight(
+              pulseItem.column + homeLaneOffset,
+              pulseItem.row + homeRowOffset,
+            ) +
+            (pulse!.index === index ? lift : 0),
+          (pulseItem.row + homeRowOffset) * ROW_SPACING - z - 2.17,
+        );
+      drawPulse(
+        pulseItem ? pulsePosition : null,
+        pulse ? overviewClock - pulse.start : 1,
+        !reduced && overviewWanted,
+      );
+      anchorHeights = anchorIndices.map((i) => {
+        const item = items[i]!;
+        return (
+          -0.89 +
+          homeHeight(item.column + homeLaneOffset, item.row + homeRowOffset) +
+          (i === index ? lift : 0)
+        );
+      });
       for (let c = 0; c < poolColumns; c++)
         for (let r = 0; r < poolRows; r++) {
           const physicalLane = centerLane + c - Math.floor(poolColumns / 2),
@@ -223,7 +425,8 @@ function buildMatrixField(
             row: physicalRow,
             index: logicalIndex,
           });
-          const hidden = physicalLane === lane && physicalRow === row;
+          const visibility =
+            physicalLane === lane && physicalRow === row ? 0 : 1;
           const hover =
             !reduced &&
             hovered?.lane === physicalLane &&
@@ -232,8 +435,10 @@ function buildMatrixField(
               : 0;
           const y =
             -2.75 +
-            shoulder(physicalRow - focusRow, physicalLane - focusLane) +
-            waves.height(physicalRow, physicalLane) +
+            (shoulder(physicalRow - focusRow, physicalLane - focusLane) +
+              waves.height(physicalRow, physicalLane)) *
+              (1 - og) +
+            homeHeight(physicalLane, physicalRow) * og +
             hover +
             (returning.find(
               (p) => p.lane === physicalLane && p.row === physicalRow,
@@ -247,7 +452,7 @@ function buildMatrixField(
                 physicalRow * ROW_SPACING - z - 2.17,
               )
               .add(p.offset);
-            transform.scale.copy(p.scale).multiplyScalar(hidden ? 0 : 1);
+            transform.scale.copy(p.scale).multiplyScalar(visibility);
             transform.updateMatrix();
             p.mesh.setMatrixAt(slot, transform.matrix);
           }
@@ -256,8 +461,10 @@ function buildMatrixField(
       active.position.set(
         lane * COLUMN_SPACING - x,
         -2.75 +
-          shoulder(row - focusRow, lane - focusLane) +
-          waves.height(row, lane) +
+          (shoulder(row - focusRow, lane - focusLane) +
+            waves.height(row, lane)) *
+            (1 - og) +
+          homeHeight(lane, row) * og +
           lift,
         row * ROW_SPACING - z - 2.17,
       );
@@ -291,12 +498,51 @@ function buildMatrixField(
       );
       if (portrait) detailAim.y -= viewSpan * 0.27;
       aim.lerp(detailAim, detail);
+      // Convert the matrix endpoint into the currently recentered local frame.
+      // In world space this endpoint stays fixed throughout entry and return.
+      if (overviewRig) {
+        aim.x += overviewRig.x - x;
+        aim.z += overviewRig.z - z;
+      }
+      const matrixFov = THREE.MathUtils.radToDeg(
+        2 * Math.atan(viewSpan / (2 * distance)),
+      );
+      const overviewAim = new THREE.Vector3(
+        anchorCenter * COLUMN_SPACING - x,
+        portrait ? -1.3 : OVERVIEW.aimHeight,
+        homeRowOffset * ROW_SPACING - z - 2.17,
+      );
+      const finalDistance = THREE.MathUtils.lerp(
+        distance,
+        OVERVIEW.distance,
+        og,
+      );
+      const finalSpan = THREE.MathUtils.lerp(
+        viewSpan,
+        overviewSpan(aspect),
+        og,
+      );
+      aim.lerp(overviewAim, og);
+      direction
+        .lerp(new THREE.Vector3(...OVERVIEW.direction).normalize(), og)
+        .normalize();
+      if ((overviewWanted && og === 1) || (!overviewWanted && og === 0))
+        overviewRig = null;
       return {
-        moving,
+        moving: moving || (og > 0 && !reduced),
+        overview: og,
+        lift,
+        journey,
+        worldOffset: { x, z },
         aim,
         direction,
-        distance,
-        fov: THREE.MathUtils.radToDeg(2 * Math.atan(viewSpan / (2 * distance))),
+        distance: finalDistance,
+        fov:
+          og === 0
+            ? matrixFov
+            : THREE.MathUtils.radToDeg(
+                2 * Math.atan(finalSpan / (2 * finalDistance)),
+              ),
       };
     },
     dispose() {

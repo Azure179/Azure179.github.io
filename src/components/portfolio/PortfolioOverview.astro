@@ -1,5 +1,6 @@
 ---
 import PageHeading from "../PageHeading.astro";
+import PortfolioModeSwitch from "./PortfolioModeSwitch.astro";
 import "../../styles/portfolio.css";
 import { entriesFor } from "../../lib/content";
 import { pagePath, entryPath, type Locale } from "../../lib/routes";
@@ -8,8 +9,9 @@ interface Props {
   locale: Locale;
   kind: "academic" | "technical";
   legacy?: boolean;
+  displaySwitch?: boolean;
 }
-const { locale, kind, legacy = false } = Astro.props;
+const { locale, kind, legacy = false, displaySwitch = true } = Astro.props;
 const en = locale === "en";
 const academic = kind === "academic";
 const entries = (
@@ -36,6 +38,7 @@ const groups = academic
     ];
 ---
 
+{displaySwitch && <PortfolioModeSwitch locale={locale} kind={kind} />}
 <PageHeading
   index={academic ? "01" : "02"}
   label={academic ? "ACADEMIC PORTFOLIO" : "TECHNICAL PORTFOLIO"}

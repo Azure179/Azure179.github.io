@@ -6,6 +6,10 @@ export default defineConfig({
   site: "https://azure179.github.io",
   output: "static",
   trailingSlash: "always",
+  redirects: {
+    "/about": "/contact/",
+    "/zh/about": "/zh/contact/",
+  },
   build: { format: "directory" },
   i18n: {
     defaultLocale: "en",
@@ -14,7 +18,10 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      filter: (page) => !page.includes("/template/") && !page.endsWith("/404/"),
+      filter: (page) =>
+        !page.includes("/template/") &&
+        !page.endsWith("/404/") &&
+        !/\/about\/?$/.test(page),
     }),
   ],
   vite: { plugins: [tailwindcss()] },

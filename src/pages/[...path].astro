@@ -4,7 +4,6 @@ import { render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DetailLayout from "../layouts/DetailLayout.astro";
 import Collection from "../components/views/Collection.astro";
-import ProfilePage from "../components/views/ProfilePage.astro";
 import InfoPage from "../components/views/InfoPage.astro";
 import { allPublished, type ArchiveEntry } from "../lib/content";
 import {
@@ -112,19 +111,17 @@ const description =
       ? t.projectsIntro
       : page === "home"
         ? t.heroDescription
-        : page === "about"
-          ? t.aboutIntro
-          : page === "research"
-            ? t.researchIntro
-            : page === "projects"
-              ? t.projectsIntro
-              : page === "publications"
-                ? t.publicationsIntro
-                : page === "contact"
-                  ? t.contactIntro
-                  : page === "cv"
-                    ? t.cvIntro
-                    : t.creditsIntro;
+        : page === "research"
+          ? t.researchIntro
+          : page === "projects"
+            ? t.projectsIntro
+            : page === "publications"
+              ? t.publicationsIntro
+              : page === "contact"
+                ? t.contactIntro
+                : page === "cv"
+                  ? t.cvIntro
+                  : t.creditsIntro;
 ---
 
 {templateKind ? (
@@ -226,7 +223,6 @@ const description =
     title={pageTitle(page, locale)}
     description={description}
   >
-    {page === "about" && <ProfilePage locale={locale} />}
     {(page === "research" || page === "academic") && (
       <PortfolioOverview
         locale={locale}

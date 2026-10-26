@@ -391,3 +391,51 @@ Phase 1 已安装依赖并完成本地实现；当前不创建 workflow、不修
 内容展示精简但 Portfolio / Project / Section 稳定 ID 不变。manifest 移除已删除的问题、贡献栏目引用，A4 不引用空 findings。PNG 在构建时由 `figure-dimensions.ts` 读取实际尺寸，支持同名替换；其文件系统代码不会进入浏览器。Research outline 仅放行 diagram 或显式 placeholder，不能据此发布结果。
 
 以下早期阶段的部署禁止说明为历史记录；当前操作流程见 `DEPLOYMENT_GUIDE.md`。
+
+## Phase 3.3：同一档案世界的高空总览（2026-10-24）
+
+HOME 与 PORTFOLIO_MATRIX 现在共享同一个 `MatrixField`，运行时不再导入 `FolderField`。`ArchiveScene` 保留 renderer、相机和场景实例，只设置 overview 目标；高空参数渐变到既有二级参数。`FolderField.ts` 和相应测试留作历史实现，不进入首页 bundle。
+
+全程使用 manifest 的 24 份真实档案记录。高空远景只重复几何轮廓，不创建伪造项目记录。`OverviewBackdrop` 在首次进入总览时创建三个 InstancedMesh，离开总览后隐藏；材质、实例池与局部波纹统一由 scene scope 清理。高空微动由近景 CPU 位移与远景顶点着色器承担，禁用动态效果时停用；不添加纹理下载或大型依赖。
+
+导航状态增加每分类的 `projects` 记忆和 `overviewSelected`。原有 rows、稳定 ID、hash、正文链接不变。分类锚点使用对应记忆位置；HTML/SVG 标注端点每帧由 Three.js 实际 camera 投影。标签排版可以避让，但不能用固定屏幕百分比代替世界端点。未选中信息隐藏且不进入 Tab 顺序，选中后通过 aria-expanded 与浮现动画展开；引线采用钝角折线。后续审阅降低总览镜头、增强呼吸，并增加仅总览生效的暖色聚光与侧光参数，矩阵终点光照保持原值。
+
+输入控制器沿用 busy/cancel 机制；确认后进入 `overview-lift`，单份模型抬升达到阈值才进入 `overview-travel`；到达二级且相机稳定后解除锁定。返回为 `overview-return`。Esc、Contact、模式切换、历史导航和页面离开均可取消当前阶段。阅读器沿用原流程，不重新创建内容。
+
+本阶段不发布。参数、截图、测试与人工验收范围见 `PHASE3_3_INFINITE_ARCHIVE_REPORT.md`。
+
+## Phase 3.3.1：首页视觉参数与高度合成
+
+`overview.ts` 统一维护首页相机、远景覆盖、浅地形、呼吸、波纹和光照增量。`overviewTerrain` 以档案世界原点和两分类真实锚点计算低频高度；近景 CPU 与远景 GPU 共用同组参数，远景本体、导轨、标签和深度材质同步。高度仍在 MatrixField 原有更新链内合成，乘以现有 overviewGain，不新增动画控制器。Reduced Motion 保留静态地形，停用时间起伏与波纹。
+
+远景沿用三个 InstancedMesh；只为降低视角后的竖屏增加覆盖，桌面实例预算不变。浅米白线性雾在进入二级时把近端推到相机远裁剪面之外，不反复切换材质 shader；原二级光照数值、相机终点、实例布局保持原值。新增自动测试逐元素比较退出首页前后的近景实例矩阵，并验证共享阴影 shader 参数、地形连续性、覆盖范围和重复清理。
+
+分类标签仅更新展示和选中 SVG 样式，保留真实投影、导航 state/hash 和渐进展开。双语主题行仅出现在 HOME/3D，普通页面及内容源不变。
+
+### 2026-10-25：简洁模式使用静态作品集总览
+
+`PortfolioModeSwitch.astro` 为实际学术/技术总览添加纯 HTML 的模式切换；静态页面不加载 Three.js。首页切换简洁模式时先取消过渡并释放场景，然后导航到当前 portfolio 的 `href`。用户操作使用 assign，自动降级使用 replace，避免浏览器返回时重复触发自动跳转。
+
+返回链接使用 `?view=3d&collection=academic|technical`：显式启用 3D，并选中相同分类；稳定 hash 仍决定项目/阅读器层级。该选择跨语言保留，优先于小屏和历史简洁偏好，但 reduced-motion 继续控制动画。WebGL 不可用或资源超时仍退回真实静态总览。无 JS 首页直接复用 `PortfolioOverview` 的学术内容并提供技术、论文链接。
+
+移除 About 独立内容路由和导航；Astro 为 `/about/`、`/zh/about/` 输出转到相同语言 Contact 的静态重定向，排除 sitemap。邮箱从 `profile.ts` 单一来源供联系面板与联系页使用。其余科研、软件详情及内容集合不变。
+
+首页标签进一步与档案投影位置解耦：`placeOverviewLabel` 只接收视口与文字尺寸，桌面左右居中对称、移动端上下居中；真实世界投影仅用于引线和锚点。锚点离屏不会隐藏标签。此处覆盖早期根据锚点摆放标签的实现，分类选择、波纹、抽取及镜头状态不变。
+
+最新反馈进一步取消引线的空间绑定：`overviewGuide` 仅根据标签位置、宽度及视口余量生成短折线和圆点；不读取磁盘坐标。首页分类区域统一使用各作品集首项目首节的位置，微地形中心保持固定；`MatrixField` 返回时归零首页循环偏移，并恢复首页近景池中心。真实项目/章节记忆仍在导航状态中，`open()` 才选取该具体档案并执行原抽取/推进。返回首页只恢复规范化场景，不改动记忆或二级终点。
+
+2026-10-26：交互位置改由 UI → 场景反投影。`bootstrap` 读取固定 SVG 圆点，`ArchiveScene.focusAt` 使用当前相机发出 Raycaster；`MatrixField.focusAt` 优先命中近景档案，其次远景实例，空隙采用档案平面交点。涟漪圆环与档案高度波使用同一命中点；抽取使用该点下方的物理档案槽位。内容目标仍来自稳定的项目/章节 ID，物理起点与内容目标分离；英雄档案位置随 overviewGain 从新槽位连续插值至原矩阵位置，二级终点不变。背景实例同步让出抽取槽位（包括移动端远景），返回首页清除临时起点。射线检测和对象分配仅在选择/进入时发生，不加入每帧 DOM 查询或射线检测。
+
+### 2026-10-26 最新回退：按真实档案重排，取消屏幕补偿
+
+本节取代上一轮固定短折线及 UI → 3D 反投影方案。projectColumns 反转每个 Portfolio 的视觉列，输出 A4/A3/A2/A1/T2/T1；projectColumn 通过 folder/project 查找视觉列，不再用累计数量加原始索引。manifest、内容编号、静态总览及 hash ID 不变。首页锚点仍是两个 Portfolio 的原始 project=0、row=0，对应视觉列 3 和 5；相机瞄准两者中点（列 4）。返回时恢复世界原点，避免无限循环导航把首页带偏。
+
+引线终点直接使用 onAnchors 的真实世界投影，选中圆环与档案顶部使用相同高度。删除 focusAt、homeFocus 及英雄档案的额外位置插值；取消尚未交付的 entry-cut 淡入淡出。首页进入明确从对应 A1/T1 首节起步，既有 overviewGain 连续推进到二级；二级横向环、每项目栏目记忆和深链接继续工作。桌面保留 33.3° 俯角及 visibleColumns=6 的投影视野；无需再次降低到不同构图。
+
+### 2026-10-26：修复进出总览的回摆
+
+旧流程中 sx/sz 在层级改变后立刻用 7/8 速率弹簧重置，overviewGain 则用两秒轨迹插值目标；相机还再次用 16/18 速率追赶这个已经运动的目标，造成相对阵列的提前移动与反向追赶。返回时 select 又会在近景尚未退出时换到首页代表档案。
+
+MatrixField 现在于过渡开始保存矩阵侧世界参照 overviewRig；sx/sz 和世界空间相机路径共用 overviewGain，局部坐标变换同步完成。中途反向沿用该参照。ArchiveScene 在 journey 帧直接采用已经平滑的相机姿态，取消二次滤波；正常二级项目/栏目和阅读器仍使用原弹簧。首页代表档案选择通过 pendingHomeSelection 延迟至 overviewGain=1；初始首页直接使用零世界偏移。相机终点、FOV、六列取景、实体数量和灯光参数不变。
+
+2026-10-26 补充：仅同步世界位移与镜头不足以消除逐列升降。shoulder 的 focusLane/focusRow 原来仍读取动画中的 x/z，导致选中隆起沿途扫过原点到 A1/T1 的列；路程越长可见波次越多，返回同理。现改为过渡期间读取冻结的 overviewRig.x/z；隆起中心不移动，仅随 (1-overviewGain) 显隐。二级日常切换仍用 x/z，未改变用户点击传播波或待机呼吸。

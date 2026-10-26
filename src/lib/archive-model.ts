@@ -27,6 +27,8 @@ export interface NavigationState {
   folder: number;
   project: number;
   rows: Record<string, number>;
+  projects: Record<string, number>;
+  overviewSelected: boolean;
   contact: boolean;
 }
 export type NavigationAction =
@@ -43,20 +45,21 @@ export const initialNavigation = (): NavigationState => ({
   folder: 0,
   project: 0,
   rows: {},
+  projects: {},
+  overviewSelected: false,
   contact: false,
 });
 const cycle = (index: number, count: number) =>
   ((index % count) + count) % count;
 export function projectColumns(portfolios: Portfolio[]) {
   return portfolios.flatMap((p, folder) =>
-    p.projects.map((entry, project) => ({ folder, project, entry })),
+    p.projects.map((entry, project) => ({ folder, project, entry })).reverse(),
   );
 }
 export function projectColumn(state: NavigationState, portfolios: Portfolio[]) {
-  return (
-    portfolios
-      .slice(0, state.folder)
-      .reduce((n, p) => n + p.projects.length, 0) + state.project
+  return projectColumns(portfolios).findIndex(
+    (column) =>
+      column.folder === state.folder && column.project === state.project,
   );
 }
 export function activeRow(state: NavigationState, portfolios: Portfolio[]) {
@@ -78,18 +81,38 @@ export function navigate(
       ? { ...state, contact: false }
       : {
           ...state,
+          overviewSelected: false,
           level:
             state.level === "DOCUMENT_VIEWER" ? "PORTFOLIO_MATRIX" : "HOME",
         };
   if (state.contact) return state;
   if (action.type === "folder")
     return state.level === "HOME"
-      ? { ...state, folder: cycle(action.index, portfolios.length), project: 0 }
+      ? {
+          ...state,
+          overviewSelected: true,
+          folder: cycle(action.index, portfolios.length),
+          project:
+            state.projects[
+              portfolios[cycle(action.index, portfolios.length)]!.id
+            ] ?? 0,
+        }
       : state;
-  if (action.type === "enter")
-    return state.level === "HOME"
-      ? { ...state, level: "PORTFOLIO_MATRIX" }
-      : state;
+  if (action.type === "enter") {
+    if (state.level !== "HOME") return state;
+    const portfolio = portfolios[state.folder]!;
+    const rows = { ...state.rows };
+    // An overview entry extracts its canonical A1/T1 first section. Other
+    // projects retain their row memory; shareable hashes still restore any row.
+    delete rows[portfolio.id + "/" + portfolio.projects[0]!.id];
+    return {
+      ...state,
+      level: "PORTFOLIO_MATRIX",
+      project: 0,
+      projects: { ...state.projects, [portfolio.id]: 0 },
+      rows,
+    };
+  }
   if (state.level === "HOME") return state;
   if (action.type === "column") {
     const columns = projectColumns(portfolios);
@@ -100,7 +123,15 @@ export function navigate(
           columns.length,
         )
       ]!;
-    return { ...state, folder: next.folder, project: next.project };
+    return {
+      ...state,
+      folder: next.folder,
+      project: next.project,
+      projects: {
+        ...state.projects,
+        [portfolios[next.folder]!.id]: next.project,
+      },
+    };
   }
   if (action.type === "open") return { ...state, level: "DOCUMENT_VIEWER" };
   const folder =
@@ -121,6 +152,7 @@ export function navigate(
     ...state,
     folder,
     project: col,
+    projects: { ...state.projects, [p.id]: col },
     rows: {
       ...state.rows,
       [p.id + "/" + project.id]: cycle(row, project.sections.length),
@@ -171,6 +203,7 @@ export function parseNavigation(
     ...state,
     folder,
     project,
+    projects: { ...state.projects, [parts[1]!]: project },
     level: parts[4] === "read" ? "DOCUMENT_VIEWER" : "PORTFOLIO_MATRIX",
     rows: { ...state.rows, [parts[1] + "/" + parts[2]]: row },
   };

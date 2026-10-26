@@ -6,9 +6,14 @@ export interface SceneStats {
   textures: number;
   pixels: number;
   moving: boolean;
+  overview: number;
+  cameraMoving: boolean;
+  lift: number;
 }
 export interface ArchiveScene {
-  configure(items: SceneItem[], kind: "folders" | "matrix"): void;
+  configure(items: SceneItem[], kind: "overview" | "matrix"): void;
+  anchors(indices: number[]): void;
+  pulse(index: number): void;
   select(
     index: number | null,
     expanded?: boolean,
@@ -29,12 +34,15 @@ export interface SceneItem {
   section?: string;
   column: number;
   row: number;
+  portfolio?: number;
 }
 export interface SceneOptions {
   host: HTMLElement;
   items: SceneItem[];
-  kind: "folders" | "matrix";
+  kind: "overview" | "matrix";
   reduced: boolean;
+  anchors: number[];
+  onAnchors(points: { x: number; y: number; visible: boolean }[]): void;
   onSelect(index: number): void;
   onOpen(index: number): void;
   onHover(index: number | null, x?: number, y?: number): void;

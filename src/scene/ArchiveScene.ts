@@ -3,8 +3,8 @@ import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { createFrameLoop, renderRatio } from "./state";
 import { createDisposalScope } from "./resources";
 import { createMatrixField } from "./MatrixField";
-import { createFolderField } from "./FolderField";
 import { spring, advance } from "./motion";
+import { OVERVIEW } from "./overview";
 import type { ArchiveScene, SceneOptions, SceneItem } from "./types";
 
 /** Shared renderer, lighting and continuous camera rig across both archive levels. */
@@ -23,10 +23,8 @@ function buildScene(
 ): ArchiveScene {
   const { host } = options;
   let kind = options.kind;
-  let field:
-    | ReturnType<typeof createMatrixField>
-    | ReturnType<typeof createFolderField>
-    | null = null;
+  let overviewCamera = kind === "overview";
+  let field: ReturnType<typeof createMatrixField> | null = null;
   resources.defer(() => field?.dispose());
   const canvas = document.createElement("canvas");
   canvas.setAttribute("aria-hidden", "true");
@@ -54,6 +52,9 @@ function buildScene(
   renderer.toneMappingExposure = 0.94;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   const scene = new THREE.Scene();
+  // Beyond the far clipping plane at matrix gain=0: no matrix haze or shader churn.
+  const overviewFog = new THREE.Fog(0xf2f0eb, 501, 650);
+  scene.fog = overviewFog;
   const room = new RoomEnvironment();
   const pmrem = new THREE.PMREMGenerator(renderer);
   const environmentSetup = createDisposalScope();
@@ -65,7 +66,8 @@ function buildScene(
   environmentSetup.dispose();
   scene.environment = environment.texture;
   scene.environmentIntensity = 0.55;
-  scene.add(new THREE.HemisphereLight(0xfff1da, 0x706250, 1.35));
+  const hemisphere = new THREE.HemisphereLight(0xfff1da, 0x706250, 1.35);
+  scene.add(hemisphere);
   const key = new THREE.DirectionalLight(0xffd3a0, 3.6);
   key.position.set(-12, 22, 16);
   key.shadow.mapSize.set(1536, 1536);
@@ -84,6 +86,12 @@ function buildScene(
   const fill = new THREE.DirectionalLight(0xf1e9dd, 0.8);
   fill.position.set(8, 4, -6);
   scene.add(fill);
+  // A broad warm pool breaks the flat aerial illumination; it fades out fully
+  // on descent, leaving the established matrix lighting untouched.
+  const overviewLight = new THREE.SpotLight(0xffe2b3, 0, 0, 0.65, 0.85, 0);
+  overviewLight.position.set(-18, 24, 10);
+  overviewLight.target.position.set(8, -2, 0);
+  scene.add(overviewLight, overviewLight.target);
   const camera = new THREE.PerspectiveCamera(10, 1, 0.5, 500);
   const cameraAim = [spring(0), spring(0), spring(0)];
   const cameraDirection = [spring(0), spring(0), spring(1)];
@@ -108,11 +116,8 @@ function buildScene(
   let pointerPosition: { x: number; y: number } | null = null;
   let down: { x: number; y: number; id: number } | null = null;
   let hovered: number | null = null;
-  function configure(items: SceneItem[], layout: "folders" | "matrix") {
-    const entering = frames > 0 && kind === "folders" && layout === "matrix";
-    const pose = frames > 0 ? field?.snapshot() : undefined;
-    field?.dispose();
-    field = null;
+  function configure(items: SceneItem[], layout: "overview" | "matrix") {
+    if (kind !== layout || layout === "overview") overviewCamera = true;
     kind = layout;
     expanded = false;
     const compact =
@@ -123,10 +128,17 @@ function buildScene(
       key.shadow.map.dispose();
       key.shadow.map = null;
     }
-    field =
-      layout === "matrix"
-        ? createMatrixField(scene, items, compact, entering, pose)
-        : createFolderField(scene, items, compact, pose);
+    if (!field)
+      field = createMatrixField(
+        scene,
+        items,
+        compact,
+        false,
+        undefined,
+        layout === "overview",
+      );
+    field.overview(layout === "overview");
+    field.anchors(options.anchors);
   }
   configure(options.items, kind);
   host.append(canvas);
@@ -150,20 +162,49 @@ function buildScene(
       pointer = null;
     }
     const target = field.update(dt, reduced, expanded, width, height);
-    let moving = target.moving;
-    const snap = reduced || frames === 0;
+    const lightGain = target.overview;
+    key.position.set(
+      -12 - 16 * lightGain,
+      22 - 6 * lightGain,
+      16 - 8 * lightGain,
+    );
+    hemisphere.intensity = 1.35 + OVERVIEW.hemisphereDelta * lightGain;
+    key.intensity = 3.6 + OVERVIEW.keyDelta * lightGain;
+    fill.intensity = 0.8 + OVERVIEW.fillDelta * lightGain;
+    overviewLight.intensity = OVERVIEW.warmFill * lightGain;
+    renderer.toneMappingExposure = 0.94 + OVERVIEW.exposureDelta * lightGain;
+    overviewFog.near = THREE.MathUtils.lerp(501, OVERVIEW.fogNear, lightGain);
+    overviewFog.far = THREE.MathUtils.lerp(650, OVERVIEW.fogFar, lightGain);
+    let moving = false;
+    // Overview poses already have a quintic ease shared with the world rig.
+    // Filtering them again makes the camera lag behind the recentered archives.
+    const snap = reduced || frames === 0 || target.journey;
+    const cameraRate = overviewCamera ? 16 : 8;
     for (const [i, axis] of (["x", "y", "z"] as const).entries()) {
-      moving = advance(cameraAim[i]!, target.aim[axis], dt, snap, 9) || moving;
       moving =
-        advance(cameraDirection[i]!, target.direction[axis], dt, snap, 8) ||
-        moving;
+        advance(
+          cameraAim[i]!,
+          target.aim[axis],
+          dt,
+          snap,
+          overviewCamera ? 18 : 9,
+        ) || moving;
+      moving =
+        advance(
+          cameraDirection[i]!,
+          target.direction[axis],
+          dt,
+          snap,
+          cameraRate,
+        ) || moving;
       aim[axis] = cameraAim[i]!.value;
       direction[axis] = cameraDirection[i]!.value;
     }
     const span =
       2 * target.distance * Math.tan(THREE.MathUtils.degToRad(target.fov / 2));
-    moving = advance(cameraDistance, target.distance, dt, snap, 8) || moving;
-    moving = advance(cameraSpan, span, dt, snap, 8) || moving;
+    moving =
+      advance(cameraDistance, target.distance, dt, snap, cameraRate) || moving;
+    moving = advance(cameraSpan, span, dt, snap, cameraRate) || moving;
     camera.position
       .copy(aim)
       .addScaledVector(direction.normalize(), cameraDistance.value);
@@ -173,7 +214,25 @@ function buildScene(
     camera.updateProjectionMatrix();
     camera.lookAt(aim);
     camera.updateMatrixWorld();
+    const cameraMoving = moving;
+    if (target.overview === 0 && !cameraMoving) overviewCamera = false;
+    moving = moving || target.moving;
     scene.updateMatrixWorld();
+    if (target.overview > 0)
+      options.onAnchors(
+        field.anchorPoints().map((point) => {
+          point.project(camera);
+          return {
+            x: ((point.x + 1) * width) / 2,
+            y: ((1 - point.y) * height) / 2,
+            visible:
+              Math.abs(point.x) < 1 &&
+              Math.abs(point.y) < 1 &&
+              point.z > -1 &&
+              point.z < 1,
+          };
+        }),
+      );
     try {
       renderer.render(scene, camera);
     } catch {
@@ -189,6 +248,9 @@ function buildScene(
       textures: renderer.info.memory.textures,
       pixels: canvas.width * canvas.height,
       moving,
+      overview: target.overview,
+      cameraMoving,
+      lift: target.lift,
     });
     return moving;
   }
@@ -299,6 +361,14 @@ function buildScene(
   );
   resize();
   return {
+    anchors(indices) {
+      field?.anchors(indices);
+      loop.wake();
+    },
+    pulse(index) {
+      field?.pulse(index);
+      loop.wake();
+    },
     configure(items, layout) {
       configure(items, layout);
       loop.wake();
@@ -306,7 +376,7 @@ function buildScene(
     select(index, open = false, navigation) {
       if (index !== null) field?.select(index, navigation);
       expanded = open;
-      pointer = kind === "folders" ? pointerPosition : null;
+      pointer = kind === "overview" ? pointerPosition : null;
       field?.clearHover();
       options.onHover(null);
       loop.wake();

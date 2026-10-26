@@ -15,13 +15,9 @@ interface Props {
 }
 const { locale, page, switchHref, switchFallback = false } = Astro.props;
 const t = ui(locale);
-const navigation: PageKey[] = [
-  "home",
-  "academic",
-  "technical",
-  "about",
-  "contact",
-];
+// Returning home is an explicit 3D choice, independent of the saved display mode.
+const homeHref = `${pagePath("home", locale)}?view=3d`;
+const navigation: PageKey[] = ["home", "academic", "technical", "contact"];
 const activePage =
   page === "research" || page === "publications"
     ? "academic"
@@ -32,11 +28,7 @@ const languageHref = switchHref ?? pagePath(page, oppositeLocale(locale));
 ---
 
 <header class="site-header" id="top">
-  <a
-    class="brand"
-    href={pagePath("home", locale)}
-    aria-label="Bioinformatics Archive — Home"
-  >
+  <a class="brand" href={homeHref} aria-label="Bioinformatics Archive — Home">
     <span class="brand-mark" aria-hidden="true">
       <i></i>
       <i></i>
@@ -52,7 +44,7 @@ const languageHref = switchHref ?? pagePath(page, oppositeLocale(locale));
     <nav class="desktop-nav" aria-label={t.menu}>
       {navigation.map((item) => (
         <a
-          href={pagePath(item, locale)}
+          href={item === "home" ? homeHref : pagePath(item, locale)}
           aria-current={activePage === item ? "page" : undefined}
         >
           {t[item]}
@@ -83,7 +75,7 @@ const languageHref = switchHref ?? pagePath(page, oppositeLocale(locale));
         <nav aria-label={t.menu}>
           {[...navigation, "cv" as const].map((item) => (
             <a
-              href={pagePath(item, locale)}
+              href={item === "home" ? homeHref : pagePath(item, locale)}
               aria-current={activePage === item ? "page" : undefined}
             >
               {t[item]} <span aria-hidden="true">↗</span>

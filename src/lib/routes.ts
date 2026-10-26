@@ -4,7 +4,6 @@ export const pages = [
   "home",
   "academic",
   "technical",
-  "about",
   "research",
   "publications",
   "projects",
