@@ -1,4 +1,5 @@
 import type { ArchiveProject, ArchiveSection } from "../lib/archive-model";
+import { createReaderSheet } from "./reader-sheet";
 
 /** Fetch existing public detail sections; never maintain a second copy of content. */
 export function createReader(
@@ -9,6 +10,7 @@ export function createReader(
   const content = dialog.querySelector<HTMLElement>("[data-viewer-content]")!;
   const status = dialog.querySelector<HTMLElement>("[data-viewer-status]")!;
   const cache = new Map<string, Document>();
+  const sheet = createReaderSheet(dialog, chinese);
   let request: AbortController | null = null;
   let key = "";
   function close() {
@@ -16,6 +18,7 @@ export function createReader(
     request?.abort();
     request = null;
     dialog.hidden = true;
+    sheet.reset();
     content.replaceChildren();
   }
   return {
@@ -32,6 +35,7 @@ export function createReader(
       content.replaceChildren();
       status.textContent = chinese ? "正在读取档案…" : "Loading archive…";
       const opening = dialog.hidden;
+      if (opening) sheet.reset();
       dialog.hidden = false;
       dialog.scrollTop = 0;
       if (opening) focusBack();
@@ -107,6 +111,7 @@ export function createReader(
     },
     dispose() {
       close();
+      sheet.dispose();
       cache.clear();
     },
   };

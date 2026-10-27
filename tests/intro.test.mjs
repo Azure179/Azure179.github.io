@@ -99,7 +99,7 @@ test("intro masks initial HTML and reveals a ready first frame at 2.4s, finishin
   assert.equal(app.timers.size, 0);
 });
 
-test("explicit 3D return masks loading despite a saved simple preference, while reduced motion stays direct", () => {
+test("explicit 3D return masks loading including mobile; reduced motion uses a static first-frame mask", () => {
   const app = setup({
     preference: "light",
     search: "?view=3d&collection=technical",
@@ -108,10 +108,24 @@ test("explicit 3D return masks loading despite a saved simple preference, while 
   app.ready("3d");
   app.tick(3000);
   assert.equal(app.state, undefined);
-  assert.equal(
-    setup({ preference: "light", search: "?view=3d", reduced: true }).state,
-    undefined,
-  );
+  for (const change of [{ compact: true }, { saveData: true }]) {
+    const mobile = setup({ ...change, search: "?view=3d" });
+    assert.equal(mobile.state, "loading");
+    mobile.tick(4000);
+    assert.equal(mobile.state, "loading");
+    mobile.ready("3d");
+    mobile.tick(4600);
+    assert.equal(mobile.state, undefined);
+  }
+  const reduced = setup({
+    preference: "light",
+    search: "?view=3d",
+    reduced: true,
+  });
+  assert.equal(reduced.state, "loading");
+  reduced.ready("3d");
+  reduced.tick(0);
+  assert.equal(reduced.state, undefined);
 });
 
 test("slow downloads wait for a rendered frame rather than showing the static placeholder", () => {

@@ -10,10 +10,11 @@
     // Storage is optional, including in private browsing.
   }
   if (
-    reduced.matches ||
-    matchMedia("(max-width: 767px), (pointer: coarse)").matches ||
-    navigator.connection?.saveData ||
-    (preference === "light" && !explicit3D)
+    !explicit3D &&
+    (reduced.matches ||
+      matchMedia("(max-width: 767px), (pointer: coarse)").matches ||
+      navigator.connection?.saveData ||
+      preference === "light")
   )
     return;
 
@@ -54,7 +55,7 @@
       if (event.detail !== "3d") return reveal();
       timer = setTimeout(
         reveal,
-        Math.max(0, 2400 - (performance.now() - started)),
+        reduced.matches ? 0 : Math.max(0, 2400 - (performance.now() - started)),
       );
     },
     options,

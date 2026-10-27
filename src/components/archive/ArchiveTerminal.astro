@@ -240,6 +240,15 @@ const en = locale === "en";
     aria-labelledby="viewer-title"
     hidden
   >
+    <button
+      class="reader-sheet-toggle"
+      data-sheet-toggle
+      aria-expanded="false"
+      aria-controls="reader-body"
+    >
+      <span class="reader-sheet-grip" aria-hidden="true"></span>
+      <span data-sheet-label>{en ? "Expand reading area" : "展开阅读区"}</span>
+    </button>
     <header>
       <div>
         <h2 id="viewer-title"></h2>
@@ -279,7 +288,7 @@ const en = locale === "en";
       </button>
     </nav>
     <p data-viewer-status role="status"></p>
-    <article class="prose" data-viewer-content></article>
+    <article id="reader-body" class="prose" data-viewer-content></article>
   </section>
 </section>
 <script>
